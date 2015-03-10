@@ -6,7 +6,7 @@
 
 int main(int argc, char** argv)
 {
-	wait_user_input();
+  wait_user_input();
 
-	return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }
