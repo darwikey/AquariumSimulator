@@ -2,8 +2,7 @@
 #define INTERFACE_H
 
 
-void parse_command(void);
-
+void wait_user_input();
 
 
 

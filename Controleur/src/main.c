@@ -6,7 +6,7 @@
 
 int main(int argc, char** argv)
 {
-	parse_command();
+	wait_user_input();
 
 	return EXIT_SUCCESS;
 }
