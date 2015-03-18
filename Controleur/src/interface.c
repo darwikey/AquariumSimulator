@@ -6,59 +6,163 @@
 #define ARGUMENT_SIZE 10
 #define BUFFER_SIZE 256
 
-void parse_command(void)
+// fonctions internes
+char** parse_command(char* buffer);
+char* parse_display_msg(char** arguments);
+char* parse_user_msg(char** arguments);
+
+
+
+void wait_user_input()
 {
-	char* buffer = malloc(BUFFER_SIZE);
+  char buffer[BUFFER_SIZE] = {0};
 
-	printf("$ ");
-	fgets(buffer, BUFFER_SIZE, stdin);
+  while(1)
+    {
+      printf("$ ");
+      fgets(buffer, BUFFER_SIZE, stdin);
 
-	char* pos = strrchr(buffer, '\n');
-	if (pos != NULL)
+      char** arguments = parse_command(buffer);
+      char* msg = parse_user_msg(arguments);
+
+      printf("%s", msg);
+
+      free(msg);
+    }
+}
+
+
+char** parse_command(char* buffer)
+{
+  char* pos = strrchr(buffer, '\n');
+  if (pos != NULL)
+    {
+      *pos = '\0';
+    }
+
+  // tableau des arguments
+  char** arguments = malloc(ARGUMENT_SIZE * sizeof(char *));
+  for (int i = 0; i < ARGUMENT_SIZE; i++)
+    {
+      arguments[i] = NULL;
+    }
+
+  // découpe la chaine à chaque espace
+  char* p = strtok(buffer, " ");
+  int i = 0;
+  while (p != NULL)
+    {
+      if (i < ARGUMENT_SIZE)
 	{
-		*pos = '\0';
+	  arguments[i] = malloc(1 + strlen(p));
+	  strcpy(arguments[i], p);
+	  i++;
+	}
+      else
+	{
+	  break;
 	}
 
-	char** arguments = malloc(ARGUMENT_SIZE * sizeof(char *));
-	for (int i = 0; i < ARGUMENT_SIZE; i++)
-	{
-		arguments[i] = NULL;
-	}
+      // découpe la chaine à chaque espace
+      p = strtok(NULL, " ");
+    }
 
-	// découpe la chaine à chaque espace
-	char* p = strtok(buffer, " ");
-	int i = 0;
-	while (p != NULL)
-	{
-		if (i < ARGUMENT_SIZE)
-		{
-			arguments[i] = malloc(1 + strlen(p));
-			strcpy(arguments[i], p);
-			i++;
-		}
-		else
-		{
-			break;
-		}
-
-		// découpe la chaine à chaque espace
-		p = strtok(NULL, " ");
-	}
-
-	free(buffer);
-
-	if (strcmp(arguments[0], "status") == 0)
-	{
-	
-	}
+  return arguments;
+}
 
 
-	// On affiche les resultats
-	for (i = 0; arguments[i] != NULL; i++)
-	{
-		printf("arg[%d] = '%s' ", i, arguments[i]);
-		free(arguments[i]);
-	}
-	free(arguments);
-	
+char* parse_display_msg(char** arguments)
+{
+  char* buffer = malloc(BUFFER_SIZE);
+  buffer[0] = '\0';
+
+  if (arguments[0] == NULL)
+    {
+      snprintf(buffer, BUFFER_SIZE, "pas de commande\n");
+    }
+  else if (strcmp(arguments[0], "hello") == 0) 
+    {
+      
+    }
+  else if (strcmp(arguments[0], "ping") == 0) 
+    {
+      
+    }
+  else if (strcmp(arguments[0], "status") == 0) 
+    {
+      
+    }
+  else if (strcmp(arguments[0], "addFish") == 0) 
+    {
+      
+    }
+  else if (strcmp(arguments[0], "delfish") == 0)
+    {
+      
+    }
+  else if (strcmp(arguments[0], "startFish") == 0)
+    {
+      
+    }
+  else
+    {
+      snprintf(buffer, BUFFER_SIZE, "NOK : commande (%s) introuvable\n", arguments[0]);
+    }
+
+
+  for (int i = 0; arguments[i] != NULL; i++)
+    {
+      free(arguments[i]);
+    }
+  free(arguments);
+
+  return buffer;
+}
+
+
+char* parse_user_msg(char** arguments)
+{
+  char* buffer = malloc(BUFFER_SIZE);
+  buffer[0] = '\0';
+
+  if (arguments[0] == NULL)
+    {
+      snprintf(buffer, BUFFER_SIZE, "pas de commande\n");
+    }
+  else if (strcmp(arguments[0], "load") == 0)
+    {
+      
+    }
+  else if (strcmp(arguments[0], "show") == 0)
+    {
+      
+    }
+  else if (strcmp(arguments[0], "add") == 0)
+    {
+      
+    }
+  else if (strcmp(arguments[0], "del") == 0)
+    {
+      
+    }
+  else if (strcmp(arguments[0], "remove") == 0)
+    {
+      
+    }
+  else if (strcmp(arguments[0], "save") == 0)
+    {
+      
+    }
+  else
+    {
+      snprintf(buffer, BUFFER_SIZE, "NOK : commande (%s) introuvable\n", arguments[0]);
+    }
+
+  for (int i = 0; arguments[i] != NULL; i++)
+    {
+      free(arguments[i]);
+    }
+  free(arguments);
+
+  return buffer;
 }

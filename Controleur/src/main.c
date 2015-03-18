@@ -2,11 +2,18 @@
 #include <stdlib.h>
 #include <string.h>
 #include "interface.h"
-
+#include "fish.h"
+#include "time.h"
 
 int main(int argc, char** argv)
 {
-	parse_command();
+  srand(time(NULL));
 
-	return EXIT_SUCCESS;
+  struct aquarium aquarium;
+  init_aquarium(&aquarium);
+ 
+
+  wait_user_input();
+
+  return EXIT_SUCCESS;
 }

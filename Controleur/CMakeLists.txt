@@ -8,7 +8,7 @@ set(CMAKE_AUTOMOC ON)
 # to always look for includes there:
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-add_definitions(-std=c99)
+add_definitions(-std=c99 -g -Wall)
 
   
 file(GLOB_RECURSE source_files src/*.c)
