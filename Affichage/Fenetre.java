@@ -2,6 +2,8 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import java.awt.Color;
 import javax.swing.JPanel;
+import java.lang.Math;
+import java.lang.Long;
 
 public class Fenetre extends JFrame {
 
@@ -9,7 +11,7 @@ public class Fenetre extends JFrame {
     new Fenetre();
   }
 
-  private Panneau pan = new Panneau();
+  private Panneau pan = new Panneau("poisson-rouge");
 
   public Fenetre() {
     
@@ -23,21 +25,53 @@ public class Fenetre extends JFrame {
       this.setVisible(true);
 
       
-      go();
+      //go();
+      move (400,400,2);
+      //pan.invertImage();
   }
+
+
     
     
     
 
     //Va a l'endroit (destX, destY) a la vitesse vitesse
-    /*  private void move (int destX, int destY, int vitesse){
+    public void move (int destX, int destY, float temps){
 	int x = pan.getPosX(), y = pan.getPosY();
-	while (x != destX){
-	    if (x > destX)
-		x--;
+	int dx = Math.abs (destX-x);
+	int dy = Math.abs (destY-y);
+	int maxDistance = 0;
 
+	if(dx<dy)
+	    maxDistance = dy;
+	else 
+	    maxDistance = dx;
+
+	int timeRepaint = (int) ((temps/maxDistance) *1000);
+	
+	
+	while (x != destX && y !=destY){
+	    if (x > destX)
+		pan.setPosX(x--);
+	    if (x < destX)
+		pan.setPosX(x++);
+	    if (y > destY)
+		pan.setPosY(y--);;
+	    if (y < destY)
+		pan.setPosY(y++);
+
+	    pan.repaint();
+	    
+	     try {
+		Thread.sleep(timeRepaint);
+	    } catch (InterruptedException e) {
+		e.printStackTrace();
+		}
+	    
 	}
-	}*/
+	
+	
+    }
 
 
     
