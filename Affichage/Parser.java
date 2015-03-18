@@ -2,11 +2,14 @@ import java.util.Scanner;
 import java.util.LinkedList;
 
 
+	
+
 public class Parser { 
-    public static void main(String[] args) { 
+    LinkedList<Fish> fishes = new LinkedList<Fish>();
+    public Parser(){
 	Scanner sc = new Scanner(System.in); 
 	String str = sc.nextLine(); 
-	LinkedList<Fish> fishes = new LinkedList<Fish>();
+
     	String fishType = "";
 	int size_x = 0, size_y = 0, coord_x = 0, coord_y = 0, speed = 0;
 	String[] parts = str.split("[, ]");
@@ -57,4 +60,9 @@ public class Parser {
 	    } */
 	System.out.println("FIN ! "); 
     }
+
+    public Fish getFish(int index){
+	return fishes.get(index);
+    }
+
 }

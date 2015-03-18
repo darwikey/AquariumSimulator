@@ -26,11 +26,10 @@ public class Fish {
 	return str;
 	    
     }
-	
 
 
-
-
-
+    public String getFishType(){
+	return fishType;
+    }
 
 }
