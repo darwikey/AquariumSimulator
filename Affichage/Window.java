@@ -7,14 +7,19 @@ import java.lang.Long;
 
 public class Fenetre extends JFrame {
 
+    private String fishName;
+
   public static void main(String[] args) {
-    new Fenetre();
+      Parser p = new Parser();
+      System.out.println(p.getFish(0).getFishType());
+      new Fenetre(p.getFish(0).getFishType());
+    
   }
 
-  private Panneau pan = new Panneau("poisson-rouge");
+  private Panneau pan = new Panneau(fishName);
 
-  public Fenetre() {
-    
+  public Fenetre(String str) {
+      fishName = str;
       this.setTitle("Aquarium");
       this.setSize(900, 600);
       this.setBackground(Color.WHITE);
