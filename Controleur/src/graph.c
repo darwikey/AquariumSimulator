@@ -36,6 +36,10 @@ int graph__load(char* path, struct graph **g){
 }
 
 void graph__show(struct graph *g, FILE* out){
+    if (g == NULL){
+        return;
+    }
+
     for (Agnode_t *v = agfstnode(g->agraph); v; v = agnxtnode(g->agraph,v)){
         fprintf(out,"\t%s [label=\"%s\"];\n",agnameof(v), agget(v,"label"));
     }

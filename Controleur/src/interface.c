@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pthread.h>
 #include "interface.h"
 #include "graph.h"
 #include "fish.h"
+
 
 #define ARGUMENT_SIZE 10
 #define BUFFER_SIZE 256
@@ -12,11 +14,17 @@
 char** parse_command(char* buffer);
 char* parse_display_msg(char** arguments);
 char* parse_user_msg(char** arguments, struct aquarium*);
-
+void* task_user_input(void* aquarium);
 
 
 void wait_user_input(struct aquarium* aquarium)
 {
+  static pthread_t thread;
+  pthread_create(&thread, NULL, task_user_input, aquarium);
+}
+
+
+void* task_user_input(void* aquarium){
   char buffer[BUFFER_SIZE] = {0};
 
   while(1)
@@ -25,12 +33,13 @@ void wait_user_input(struct aquarium* aquarium)
       fgets(buffer, BUFFER_SIZE, stdin);
 
       char** arguments = parse_command(buffer);
-      char* msg = parse_user_msg(arguments, aquarium);
+      char* msg = parse_user_msg(arguments, (struct aquarium*)aquarium);
 
       printf("%s", msg);
 
       free(msg);
     }
+  
 }
 
 
