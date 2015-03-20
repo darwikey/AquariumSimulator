@@ -12,12 +12,13 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <errno.h>
+#include "fish.h"
 
 #define INVALID_SOCKET -1
 #define SOCKET_ERROR -1
 
 
-void network__launch(uint16_t port_number);
+void network__launch(uint16_t port_number, struct aquarium* aquarium);
 
 
 #endif

@@ -4,10 +4,14 @@
 #define LISTEN_MAX 5
 #define THREAD_NB 16
 
+struct thread_parameter{
+  struct aquarium* aquarium;
+  int sock;
+};
 
-void* network__wait(void* socket);
+void* network__wait(void* parameter);
 
-void network__launch(uint16_t port_number){
+void network__launch(uint16_t port_number, struct aquarium* aquarium){
 
   struct sockaddr_in dest; 
   
@@ -36,23 +40,30 @@ void network__launch(uint16_t port_number){
 
   pthread_t threads[THREAD_NB];
 
+  struct thread_parameter param;
+  param.aquarium = aquarium;
+  param.sock = sock;
+
   for (int i=0; i < THREAD_NB; i++){
-    pthread_create(&threads[i], NULL, network__wait, &sock);
+    pthread_create(&threads[i], NULL, network__wait, &param);
   }
   
+  while(1);//TODO
   
   close(sock);
 }
 
 
-void* network__wait(void* socket){
+void* network__wait(void* parameter){
+  struct thread_parameter param = *(struct thread_parameter*) parameter;
   
+
   /*struct sockaddr_in client_addr;
   memset(&client_addr, 0, sizeof(client_addr));    
   
   socklen_t client_addr_size = sizeof(client_addr);*/
   
-  int client_sock = accept(*(int*)socket, NULL, NULL);
+  int client_sock = accept(param.sock, NULL, NULL);
   
   if(client_sock == INVALID_SOCKET){
     perror("accept()");
