@@ -65,4 +65,8 @@ public class Parser {
 	return fishes.get(index);
     }
 
+    public LinkedList<Fish> getFishes(){
+	return fishes;
+    }
+
 }
