@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include "interface.h"
 #include "fish.h"
+#include "network.h"
 #include "time.h"
+
 
 int main(int argc, char** argv)
 {
