@@ -13,8 +13,9 @@ int main(int argc, char** argv)
   struct aquarium aquarium;
   init_aquarium(&aquarium);
  
+  network__launch(4242);
 
-  wait_user_input();
+  //  wait_user_input();
 
   return EXIT_SUCCESS;
 }

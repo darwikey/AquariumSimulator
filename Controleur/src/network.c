@@ -1,11 +1,14 @@
 #include "network.h"
-
+#include "pthread.h"
 #define BUFFER_SIZE 256
 #define LISTEN_MAX 5
+#define THREAD_NB 16
 
 
-void network__wait(uint16_t port_number){
-  char buffer[BUFFER_SIZE + 1]; // +1 so we can add null terminator
+void* network__wait(void* socket);
+
+void network__launch(uint16_t port_number){
+
   struct sockaddr_in dest; 
   
   int sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -30,26 +33,41 @@ void network__wait(uint16_t port_number){
     exit(errno);
   }
 
-  struct sockaddr_in client_addr;
+
+  pthread_t threads[THREAD_NB];
+
+  for (int i=0; i < THREAD_NB; i++){
+    pthread_create(&threads[i], NULL, network__wait, &sock);
+  }
+  
+  
+  close(sock);
+}
+
+
+void* network__wait(void* socket){
+  
+  /*struct sockaddr_in client_addr;
   memset(&client_addr, 0, sizeof(client_addr));    
   
-  socklen_t client_addr_size = sizeof(client_addr);
+  socklen_t client_addr_size = sizeof(client_addr);*/
   
-  int client_sock = accept(sock, (struct sockaddr *)&client_addr, &client_addr_size);
+  int client_sock = accept(*(int*)socket, NULL, NULL);
   
   if(client_sock == INVALID_SOCKET){
     perror("accept()");
     exit(errno);
   }
 
-
+  char buffer[BUFFER_SIZE + 1]; // +1 so we can add null terminator  
   int lenght = recv(client_sock, buffer, BUFFER_SIZE, 0);
- 
+  
   /* We have to null terminate the received data ourselves */
   buffer[lenght] = '\0';
   
   printf("Received %s (%d bytes).\n", buffer, lenght);
  
+
   close(client_sock);
-  close(sock);
+  return NULL;
 }
