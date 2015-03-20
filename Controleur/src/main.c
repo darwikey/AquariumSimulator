@@ -4,6 +4,7 @@
 #include "fish.h"
 #include "network.h"
 #include "time.h"
+#include "graph.h"
 
 
 int main(int argc, char** argv)
@@ -15,7 +16,8 @@ int main(int argc, char** argv)
  
   network__launch(4242, &aquarium);
 
-  //  wait_user_input();
+  wait_user_input(&aquarium);
+
 
   return EXIT_SUCCESS;
 }

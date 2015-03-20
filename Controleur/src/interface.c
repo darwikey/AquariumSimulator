@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "interface.h"
+#include "graph.h"
+#include "fish.h"
 
 #define ARGUMENT_SIZE 10
 #define BUFFER_SIZE 256
@@ -9,11 +11,11 @@
 // fonctions internes
 char** parse_command(char* buffer);
 char* parse_display_msg(char** arguments);
-char* parse_user_msg(char** arguments);
+char* parse_user_msg(char** arguments, struct aquarium*);
 
 
 
-void wait_user_input()
+void wait_user_input(struct aquarium* aquarium)
 {
   char buffer[BUFFER_SIZE] = {0};
 
@@ -23,7 +25,7 @@ void wait_user_input()
       fgets(buffer, BUFFER_SIZE, stdin);
 
       char** arguments = parse_command(buffer);
-      char* msg = parse_user_msg(arguments);
+      char* msg = parse_user_msg(arguments, aquarium);
 
       printf("%s", msg);
 
@@ -120,7 +122,7 @@ char* parse_display_msg(char** arguments)
 }
 
 
-char* parse_user_msg(char** arguments)
+char* parse_user_msg(char** arguments, struct aquarium * aquarium)
 {
   char* buffer = malloc(BUFFER_SIZE);
   buffer[0] = '\0';
@@ -131,15 +133,23 @@ char* parse_user_msg(char** arguments)
     }
   else if (strcmp(arguments[0], "load") == 0)
     {
-      
+      if (arguments[1] == NULL){
+          snprintf(buffer,BUFFER_SIZE, "pas de fichier indiqué\n");
+      }else{
+          graph__load(arguments[1], &(aquarium->graph));
+      }
     }
   else if (strcmp(arguments[0], "show") == 0)
     {
-      
+      graph__show(aquarium->graph,stdout);
     }
   else if (strcmp(arguments[0], "add") == 0)
     {
-      
+      if (arguments[1] == NULL || arguments[2] == NULL){
+          snprintf(buffer,BUFFER_SIZE, "indiquer deux noeuds\n");
+      }else{
+          graph__add_link(aquarium->graph, arguments[1], arguments[2]);
+      }
     }
   else if (strcmp(arguments[0], "del") == 0)
     {

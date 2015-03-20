@@ -1,5 +1,6 @@
 #ifndef FISH_H
 #define FISH_H
+#include "graph.h"
 
 
 struct fish{
@@ -11,6 +12,7 @@ struct fish{
 struct aquarium{
   struct fish** fishs;
   unsigned int fish_number;
+  struct graph *graph;
 };
 
 // create a fish with a random speed

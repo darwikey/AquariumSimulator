@@ -17,6 +17,7 @@ struct fish* create_fish(char* name, float x, float y){
 void init_aquarium(struct aquarium* a){
   a->fishs = NULL;
   a->fish_number = 0;
+  a->graph = NULL;
 }
 
 
