@@ -153,14 +153,27 @@ char* parse_user_msg(char** arguments, struct aquarium * aquarium)
     }
   else if (strcmp(arguments[0], "del") == 0)
     {
-      
+      if (arguments[1] == NULL || arguments[2] == NULL){
+          snprintf(buffer,BUFFER_SIZE, "indiquer deux noeuds\n");
+      }else{
+          graph__del_link(aquarium->graph, arguments[1], arguments[2]);
+      }
     }
   else if (strcmp(arguments[0], "remove") == 0)
     {
-      
+      if (arguments[1] == NULL){
+          snprintf(buffer,BUFFER_SIZE, "pas de noeud indiqué\n");
+      }else{
+          graph__remove_node(aquarium->graph, arguments[1]);
+      }
     }
   else if (strcmp(arguments[0], "save") == 0)
     {
+      if (arguments[1] == NULL){
+          snprintf(buffer,BUFFER_SIZE, "pas de fichier indiqué\n");
+      }else{
+          graph__save(aquarium->graph, arguments[1]);
+      }
       
     }
   else
