@@ -47,7 +47,7 @@ public class Panel extends JPanel {
         //g.drawImage(img, 0, 0, tailleEcranX, tailleEcranY, this);
         
         try {        	
-        	img = ImageIO.read(new File("fondAquarium.jpg"));
+        	img = ImageIO.read(new File("fond_ecran1.jpg"));
         	g.drawImage(img, 0, 0, tailleEcranX, tailleEcranY, this);
         	
         	for (int i =0; i < listFish.size(); i++){
