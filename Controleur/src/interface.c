@@ -17,7 +17,7 @@ char* parse_user_msg(char** arguments, struct aquarium*);
 void* task_user_input(void* aquarium);
 
 
-void wait_user_input(struct aquarium* aquarium)
+void interface__wait_user_input(struct aquarium* aquarium)
 {
   static pthread_t thread;
   pthread_create(&thread, NULL, task_user_input, aquarium);

@@ -2,7 +2,7 @@
 #include "stdlib.h"
 
 
-struct fish* create_fish(char* name, float x, float y){
+struct fish* fish__create_fish(char* name, float x, float y){
   struct fish* f = malloc(sizeof(struct fish));
   f->name = name;
   f->x = x;
@@ -14,14 +14,14 @@ struct fish* create_fish(char* name, float x, float y){
 }
 
 
-void init_aquarium(struct aquarium* a){
+void fish__init_aquarium(struct aquarium* a){
   a->fishs = NULL;
   a->fish_number = 0;
   a->graph = NULL;
 }
 
 
-void add_fish(struct aquarium* a, struct fish* f){
+void fish__add_fish(struct aquarium* a, struct fish* f){
   a->fish_number++;
 
   if (a->fishs == NULL){

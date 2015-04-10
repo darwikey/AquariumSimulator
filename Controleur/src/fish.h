@@ -16,13 +16,13 @@ struct aquarium{
 };
 
 // create a fish with a random speed
-struct fish* create_fish(char* name, float x, float y);
+struct fish* fish__create_fish(char* name, float x, float y);
 
 //init aquarium
-void init_aquarium(struct aquarium* a);
+void fish__init_aquarium(struct aquarium* a);
 
 //add a fish in the aquarium
-void add_fish(struct aquarium* a, struct fish* f);
+void fish__add_fish(struct aquarium* a, struct fish* f);
 
 
 #endif

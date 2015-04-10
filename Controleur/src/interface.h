@@ -2,7 +2,7 @@
 #define INTERFACE_H
 #include "fish.h"
 
-void wait_user_input(struct aquarium*);
+void interface__wait_user_input(struct aquarium*);
 
 
 
