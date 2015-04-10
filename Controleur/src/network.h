@@ -20,5 +20,6 @@
 
 void network__launch(uint16_t port_number, struct aquarium* aquarium);
 
+void network__close(void);
 
 #endif

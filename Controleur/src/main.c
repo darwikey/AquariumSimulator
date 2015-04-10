@@ -9,6 +9,7 @@
 
 int main(int argc, char** argv)
 {
+  // initialise les nombres aléatoires
   srand(time(NULL));
 
   struct aquarium aquarium;
@@ -18,6 +19,7 @@ int main(int argc, char** argv)
 
   network__launch(4242, &aquarium);
 
+  fish__update(&aquarium);
 
   return EXIT_SUCCESS;
 }
