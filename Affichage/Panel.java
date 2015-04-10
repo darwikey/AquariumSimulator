@@ -1,0 +1,76 @@
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+import java.util.LinkedList;
+
+import javax.imageio.ImageIO;
+import javax.swing.JPanel;
+
+
+@SuppressWarnings("serial")
+ 
+public class Panel extends JPanel {
+
+    private LinkedList <String> listNameFish;
+    private LinkedList <Fish> listFish;
+
+
+    public Panel (LinkedList <Fish> lf){
+    	listFish = new LinkedList <Fish> (lf);
+    	listNameFish = new LinkedList <String> ();
+    	for (int i=0; i < lf.size();i++){
+    		listNameFish.add(listFish.get(i).getFishType());
+    	}
+
+    }
+	
+
+    // list [PoissonRouge at 90x4,10x4,5] [Joli at 20x80,12x6,5]
+    // list [PoissonRouge at 90x4,20x20,5]
+    // list [PoissonRouge at 90x4,20x20,5] [PoissonRouge at 80x40,20x20,5] [PoissonRouge at 200x60,20x20,5]
+    
+    public void paintComponent(Graphics g){
+    	
+    	int tailleEcranX = this.getWidth();
+        int tailleEcranY = this.getHeight();
+            	
+        Image img;
+        int posX = -50;
+        int posY = -50;
+	
+        int tailleX = 300;
+        int tailleY = 200;
+        
+        //g.setColor(Color.blue);
+        //g.drawImage(img, 0, 0, tailleEcranX, tailleEcranY, this);
+        
+        try {        	
+        	img = ImageIO.read(new File("fondAquarium.jpg"));
+        	g.drawImage(img, 0, 0, tailleEcranX, tailleEcranY, this);
+        	
+        	for (int i =0; i < listFish.size(); i++){
+        		img = ImageIO.read(new File(listFish.get(i).getFishType()+".png"));
+        		posX = listFish.get(i).getPosX();
+        		posY = listFish.get(i).getPosY();				
+        		tailleX = (int) (((float)(listFish.get(i).getSizeX())/100) * tailleEcranX);
+        		tailleY = (int) (((float)(listFish.get(i).getSizeY())/100) * tailleEcranY);    		
+      		
+        		if (listFish.get(i).getInversed()){
+        			g.drawImage(img, posX+tailleX, posY, -tailleX, tailleY, this);
+        		}
+        		else{
+        			g.drawImage(img, posX, posY, tailleX, tailleY, this);
+        		}
+
+        	}
+        } catch (IOException e) {
+        	e.printStackTrace();
+        }                
+    }
+    
+ 
+    
+}
+
