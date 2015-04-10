@@ -4,6 +4,7 @@
 #include "fish.h"
 #include "network.h"
 #include "time.h"
+#include "graph.h"
 
 
 int main(int argc, char** argv)
@@ -13,8 +14,10 @@ int main(int argc, char** argv)
   struct aquarium aquarium;
   init_aquarium(&aquarium);
  
+  wait_user_input(&aquarium);
 
-  wait_user_input();
+  network__launch(4242, &aquarium);
+
 
   return EXIT_SUCCESS;
 }

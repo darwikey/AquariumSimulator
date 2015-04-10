@@ -9,12 +9,15 @@ struct fish* create_fish(char* name, float x, float y){
   f->y = y;
   f->vx = (rand() / (float)RAND_MAX) * 2.f - 1.f;
   f->vy = (rand() / (float)RAND_MAX) * 2.f - 1.f;
+
+  return f;
 }
 
 
 void init_aquarium(struct aquarium* a){
   a->fishs = NULL;
   a->fish_number = 0;
+  a->graph = NULL;
 }
 
 
