@@ -9,15 +9,17 @@
 
 int main(int argc, char** argv)
 {
+  // initialise les nombres aléatoires
   srand(time(NULL));
 
   struct aquarium aquarium;
-  init_aquarium(&aquarium);
+  fish__init_aquarium(&aquarium);
  
-  wait_user_input(&aquarium);
+  interface__wait_user_input(&aquarium);
 
   network__launch(4242, &aquarium);
 
+  fish__update(&aquarium);
 
   return EXIT_SUCCESS;
 }

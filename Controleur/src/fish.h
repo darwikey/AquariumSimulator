@@ -4,8 +4,9 @@
 
 
 struct fish{
-  float x, y; // position
-  float vx, vy; //vitesse
+  int target_x, target_y; //position a atteindre
+  int size_x, size_y; //taille du poisson
+  int delay; // delai en seconde avant update
   char* name;
 };
 
@@ -16,13 +17,15 @@ struct aquarium{
 };
 
 // create a fish with a random speed
-struct fish* create_fish(char* name, float x, float y);
+struct fish* fish__create_fish(char* name);
 
 //init aquarium
-void init_aquarium(struct aquarium* a);
+void fish__init_aquarium(struct aquarium* a);
 
 //add a fish in the aquarium
-void add_fish(struct aquarium* a, struct fish* f);
+void fish__add_fish(struct aquarium* a, struct fish* f);
 
+// met a jour la position des poissons
+void fish__update(struct aquarium* a);
 
 #endif

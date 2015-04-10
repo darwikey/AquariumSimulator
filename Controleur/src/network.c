@@ -9,13 +9,20 @@ struct thread_parameter{
   int sock;
 };
 
+// variables gloabale
+static pthread_t threads[THREAD_NB];
+static int sock = INVALID_SOCKET;
+
+// fonctions internes
 void* network__wait(void* parameter);
 
+
+//lance les threads attendant un client
 void network__launch(uint16_t port_number, struct aquarium* aquarium){
 
   struct sockaddr_in dest; 
   
-  int sock = socket(AF_INET, SOCK_STREAM, 0);
+  sock = socket(AF_INET, SOCK_STREAM, 0);
   if (sock == INVALID_SOCKET){
     perror("socket()");
     exit(errno);
@@ -37,9 +44,6 @@ void network__launch(uint16_t port_number, struct aquarium* aquarium){
     exit(errno);
   }
 
-
-  pthread_t threads[THREAD_NB];
-
   struct thread_parameter param;
   param.aquarium = aquarium;
   param.sock = sock;
@@ -48,12 +52,16 @@ void network__launch(uint16_t port_number, struct aquarium* aquarium){
     pthread_create(&threads[i], NULL, network__wait, &param);
   }
   
-  while(1);//TODO
-  
+}
+
+
+// ferme le socket
+void network__close(void){
   close(sock);
 }
 
 
+// thread qui attend un client
 void* network__wait(void* parameter){
   struct thread_parameter param = *(struct thread_parameter*) parameter;
   
@@ -70,10 +78,10 @@ void* network__wait(void* parameter){
     exit(errno);
   }
 
-  char buffer[BUFFER_SIZE + 1]; // +1 so we can add null terminator  
+
+  char buffer[BUFFER_SIZE + 1];
   int lenght = recv(client_sock, buffer, BUFFER_SIZE, 0);
   
-  /* We have to null terminate the received data ourselves */
   buffer[lenght] = '\0';
   
   printf("Received %s (%d bytes).\n", buffer, lenght);

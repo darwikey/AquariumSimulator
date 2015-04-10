@@ -5,6 +5,7 @@
 #include "interface.h"
 #include "graph.h"
 #include "fish.h"
+#include "network.h"
 
 
 #define ARGUMENT_SIZE 10
@@ -17,7 +18,7 @@ char* parse_user_msg(char** arguments, struct aquarium*);
 void* task_user_input(void* aquarium);
 
 
-void wait_user_input(struct aquarium* aquarium)
+void interface__wait_user_input(struct aquarium* aquarium)
 {
   static pthread_t thread;
   pthread_create(&thread, NULL, task_user_input, aquarium);
@@ -185,6 +186,10 @@ char* parse_user_msg(char** arguments, struct aquarium * aquarium)
       }
       
     }
+  else if (strcmp(arguments[0], "exit") == 0){
+    network__close();// ferme le network proprement
+    exit(1);
+  }
   else
     {
       snprintf(buffer, BUFFER_SIZE, "NOK : commande (%s) introuvable\n", arguments[0]);
