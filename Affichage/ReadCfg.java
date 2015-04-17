@@ -62,6 +62,7 @@ public class ReadCfg {
     public String getControllerAdress(){
         return this.controllerAdress;
     }
+
      
     public String getId(){
         return this.id;
