@@ -10,13 +10,21 @@ struct thread_parameter{
   int sock;
 };
 
+// variables gloabale
+static pthread_t threads[THREAD_NB];
+static int sock = INVALID_SOCKET;
+static struct thread_parameter param;
+
+// fonctions internes
 void* network__wait(void* parameter);
 
+
+//lance les threads attendant un client
 void network__launch(uint16_t port_number, struct aquarium* aquarium){
 
   struct sockaddr_in dest; 
   
-  int sock = socket(AF_INET, SOCK_STREAM, 0);
+  sock = socket(AF_INET, SOCK_STREAM, 0);
   if (sock == INVALID_SOCKET){
     perror("socket()");
     exit(errno);
@@ -38,23 +46,23 @@ void network__launch(uint16_t port_number, struct aquarium* aquarium){
     exit(errno);
   }
 
-
-  pthread_t threads[THREAD_NB];
-
-  struct thread_parameter param;
   param.aquarium = aquarium;
   param.sock = sock;
 
   for (int i=0; i < THREAD_NB; i++){
     pthread_create(&threads[i], NULL, network__wait, &param);
   }
-  
-  while(1);//TODO
-  
+
+}
+
+
+// ferme le socket
+void network__close(void){
   close(sock);
 }
 
 
+// thread qui attend un client
 void* network__wait(void* parameter){
   struct thread_parameter *param = (struct thread_parameter*) parameter;
   
@@ -64,8 +72,9 @@ void* network__wait(void* parameter){
   
   socklen_t client_addr_size = sizeof(client_addr);*/
   
+printf("sock : %d  (%s)\n",sock, (sock == INVALID_SOCKET) ? "not ok" : "ok");
+
   int client_sock = accept(param->sock, NULL, NULL);
-  
   if(client_sock == INVALID_SOCKET){
     perror("accept()");
     exit(errno);
