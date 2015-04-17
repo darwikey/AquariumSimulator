@@ -1,5 +1,6 @@
 #include "network.h"
 #include "pthread.h"
+#include "interface.h"
 #define BUFFER_SIZE 256
 #define LISTEN_MAX 5
 #define THREAD_NB 16
@@ -55,7 +56,7 @@ void network__launch(uint16_t port_number, struct aquarium* aquarium){
 
 
 void* network__wait(void* parameter){
-  struct thread_parameter param = *(struct thread_parameter*) parameter;
+  struct thread_parameter *param = (struct thread_parameter*) parameter;
   
 
   /*struct sockaddr_in client_addr;
@@ -63,21 +64,51 @@ void* network__wait(void* parameter){
   
   socklen_t client_addr_size = sizeof(client_addr);*/
   
-  int client_sock = accept(param.sock, NULL, NULL);
+  int client_sock = accept(param->sock, NULL, NULL);
   
   if(client_sock == INVALID_SOCKET){
     perror("accept()");
     exit(errno);
   }
 
+  struct display display;
+  display.get_fish_continously = 0;
+  display.log_out = 0;
+  display.buffer = NULL;
+
   char buffer[BUFFER_SIZE + 1]; // +1 so we can add null terminator  
-  int lenght = recv(client_sock, buffer, BUFFER_SIZE, 0);
-  
-  /* We have to null terminate the received data ourselves */
-  buffer[lenght] = '\0';
-  
-  printf("Received %s (%d bytes).\n", buffer, lenght);
- 
+  int used_buffer = 0;//number of char used in buffer
+  while (!display.log_out){
+      int lenght = recv(client_sock, buffer+used_buffer, BUFFER_SIZE - used_buffer, MSG_DONTWAIT);
+      if (lenght >= 0){
+          /* We have to null terminate the received data ourselves */
+          buffer[lenght+used_buffer] = '\0';
+          for (char* current = buffer+used_buffer; *current != '\0'; current ++){
+              if (*current == '\r'){
+                  printf("enfer et damnation ! il y a un \\r ! on est sous linux pourtant!\npour éviter ce problème on utilise une solution instable (cf %s ligne %d)\n", __FILE__, __LINE__);
+                  *current = '\0';
+              }
+              if (*current == '\n'){
+                  *current = '\0';
+                  char * result = interface__compute_display_input(param->aquarium, &display, buffer);
+                  write(client_sock, result, strlen(result));//TODO check for errors
+                  free(result);
+                  //then copy the chars after the \n to the start of buffer
+                  used_buffer = 0;
+                  lenght = 0;
+                  for (current ++; *current !='\0';current ++){
+                      buffer[used_buffer] = *current;
+                      used_buffer ++;
+                  }
+                  buffer[used_buffer] = '\0';
+                  break;
+              }
+          }
+
+          used_buffer += lenght;
+      }
+      sleep(1);//to be removed
+  }
 
   close(client_sock);
   return NULL;

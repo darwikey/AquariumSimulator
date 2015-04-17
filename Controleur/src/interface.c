@@ -12,7 +12,7 @@
 
 // fonctions internes
 char** parse_command(char* buffer);
-char* parse_display_msg(char** arguments);
+char* parse_display_msg(char** arguments, struct aquarium*, struct display*);
 char* parse_user_msg(char** arguments, struct aquarium*);
 void* task_user_input(void* aquarium);
 
@@ -82,7 +82,7 @@ char** parse_command(char* buffer)
 }
 
 
-char* parse_display_msg(char** arguments)
+char* parse_display_msg(char** arguments, struct aquarium *aquarium, struct display *display)
 {
   char* buffer = malloc(BUFFER_SIZE);
   buffer[0] = '\0';
@@ -197,4 +197,16 @@ char* parse_user_msg(char** arguments, struct aquarium * aquarium)
   free(arguments);
 
   return buffer;
+}
+
+
+char* interface__compute_display_input(struct aquarium* aquarium, struct display* display, char* command){
+    printf("compute command \"%s\"\n",command);
+
+    char** arguments = parse_command(command);
+    char* msg = parse_display_msg(arguments, aquarium, display);
+
+
+    return msg;
+
 }
