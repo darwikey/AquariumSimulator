@@ -97,7 +97,7 @@ public class Parser {
 		
 		case 0:
 		    speed = Integer.parseInt(parts[j]);
-		    fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y, speed));
+		    fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y));
 		    break;
 	
 		}
@@ -134,7 +134,7 @@ public class Parser {
 		
 		case 0:
 		    speed = Integer.parseInt(parts[j]);
-		    fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y, speed));
+		    fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y));
 		    break;
 	
 		}

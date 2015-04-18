@@ -10,36 +10,39 @@ public class Window extends JFrame {
 	private LinkedList <Fish> listFish;
 
 	public Window(LinkedList<Fish> lf) {
-      listFish = new LinkedList <Fish> (lf);
-      pan =  new Panel(listFish);
-
-      this.setTitle("Aquarium");
-      this.setSize(900, 600);
-      this.setBackground(Color.WHITE);
-      this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      this.setLocationRelativeTo(null);
-      this.setContentPane(pan);
-      this.setVisible(true);
-      
-      Thread t;
-      for (int i =0; i < listFish.size(); i++){
-    	  t = new Thread(new RunImpl(listFish.get(i), 0, 0, 5, pan));
-    	  t.start();
-      }
-      autoRepaint ();
-      
-  }  
+	    listFish = lf;
+	    pan =  new Panel(listFish);
+	    
+	    this.setTitle("Aquarium");
+	    this.setSize(900, 600);
+	    this.setBackground(Color.WHITE);
+	    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    this.setLocationRelativeTo(null);
+	    this.setContentPane(pan);
+	    this.setVisible(true);
+	    
+	    //debug
+	    Fish myFish = new Fish("poissonRouge", 7, 7, 20, 10);
+	    myFish.moveToDest(70, 80, 3.0);
+	    listFish.add(myFish);
+	    
+	}  
 	
 	public void autoRepaint (){
-		while (true){		
-			pan.repaint();
-			try {
-				Thread.sleep(3);
-			    } catch (InterruptedException e) {
-				e.printStackTrace();
-			    }
+	    while (true){		
+		pan.repaint();
+		
+		for (int i =0; i < listFish.size(); i++){
+		    listFish.get(i).move(0.01);
 		}
-			
+		
+		try {
+		    Thread.sleep(10);
+		} catch (InterruptedException e) {
+		    e.printStackTrace();
+		}
+	    }
+	    
 			
 	}
         
