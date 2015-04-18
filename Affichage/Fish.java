@@ -41,13 +41,15 @@ public class Fish {
 	double dx = dest_x - coord_x;
 	double dy = dest_y - coord_y;
 
-	double l = Math.sqrt(dx * dx + dy * dy);
+	if (Math.abs(dx) > 1.0 || Math.abs(dy) > 1.0){
+	    double l = Math.sqrt(dx * dx + dy * dy);
 
-	dx = (dx / l) * time_elapsed * speed;
-	dy = (dy / l) * time_elapsed * speed;
+	    dx = (dx / l) * time_elapsed * speed;
+	    dy = (dy / l) * time_elapsed * speed;
 
-	coord_x += dx;
-	coord_y += dy;
+	    coord_x += dx;
+	    coord_y += dy;
+	}
     }
 
 
@@ -85,8 +87,8 @@ public class Fish {
   
 
     public void moveToDest (int destX, int destY, double temps){
-	this.dest_x = (double)dest_x;
-	this.dest_y = (double)dest_y;
+	this.dest_x = (double)destX;
+	this.dest_y = (double)destY;
 
 	double dx = dest_x - coord_x;
 	double dy = dest_x - coord_y;
@@ -94,6 +96,8 @@ public class Fish {
 	double l = Math.sqrt(dx * dx + dy * dy);
 	
 	this.speed = l / temps;
+
+	this.inversed = dx < 0.0;
     }
   
 

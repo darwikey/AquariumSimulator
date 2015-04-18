@@ -54,8 +54,8 @@ public class Panel extends JPanel {
         	for (int i =0; i < listFish.size(); i++){
 		    
         		img = ImageIO.read(new File(listFish.get(i).getFishType()+".png"));
-        		posX = listFish.get(i).getPosX();
-        		posY = listFish.get(i).getPosY();
+        		posX = listFish.get(i).getPosX() * tailleEcranX / 100;
+        		posY = listFish.get(i).getPosY() * tailleEcranY / 100;
 			System.out.println("pos " + posX+ "   " + posY);
 
         		tailleX = listFish.get(i).getSizeX() * tailleEcranX / 100;
