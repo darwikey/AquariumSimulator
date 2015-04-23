@@ -8,18 +8,25 @@ public class Fish {
     private double speed;
     private double dest_x;
     private double dest_y;
+    private double timetoDest;
     private boolean inversed;
+    private double dist_x;
+    private double dist_y;
+
+    public Fish(String fishType, int size_x, int size_y, int dest_x, int dest_y, double time){
 
 
-    public Fish(String fishType, int size_x, int size_y, int coord_x, int coord_y){
 	this.fishType = fishType;
 	this.size_x = size_x;
 	this.size_y = size_y;
-	this.coord_x = coord_x;
-	this.coord_y = coord_y;
-	this.dest_x = coord_x;
-	this.dest_y = coord_y;
-	this.speed = 0.0;
+	this.coord_x = 50;
+	this.coord_y = 50;
+	this.dest_x = dest_x;
+	this.dest_y = dest_y;
+	this.dist_x = dest_x - coord_x;
+	this.dist_y =  dest_y - coord_y;
+	//	this.speed = l/time; // pixels/seconde ?
+	this.timetoDest = time;
 	this.inversed = false;
     }
      
@@ -36,54 +43,21 @@ public class Fish {
     }
 
     //Return time repaint
-    public void move (double time_elapsed){
+    public void move (int timeElapsed){
 
-	double dx = dest_x - coord_x;
-	double dy = dest_y - coord_y;
+	
+	if (Math.abs(dest_x-coord_x) > 1.0 || Math.abs(dest_y-coord_y) > 1.0){
 
-	if (Math.abs(dx) > 1.0 || Math.abs(dy) > 1.0){
-	    double l = Math.sqrt(dx * dx + dy * dy);
+	    //System.out.println("move");
+	//dx = dx / l) * time_elapsed * speed;
+	//   dy = (dy / l) * time_elapsed * speed;
 
-	    dx = (dx / l) * time_elapsed * speed;
-	    dy = (dy / l) * time_elapsed * speed;
-
-	    coord_x += dx;
-	    coord_y += dy;
+	    coord_x += dist_x/(timetoDest*1000/timeElapsed);
+	    coord_y += dist_y/(timetoDest*1000/timeElapsed);
 	}
     }
 
 
-    /*private void bounce (){
-
-		boolean backX = false;
-		boolean backY = false;
-		
-		int tailleX = (int) (((double)(fish.getSizeX())/100) * pan.getWidth());
-		int tailleY = (int) (((double)(fish.getSizeY())/100) * pan.getHeight());
-		
-		
-		if (x < 1){
-		    backX = false;
-		    inversed = true;
-		}
-		if (x > pan.getWidth() - tailleX){
-		    backX = true;
-		    inversed = false;
-		}
-		if (y < 1)
-		    backY = false;
-		if (y > pan.getHeight() - tailleY)
-		    backY = true;
-		if (!backX)
-		    coord_x++;
-		else
-		    coord_x--;
-		if (!backY)
-		    coord_y++;
-		else
-		    coord_y--;
-		
-		    }*/
   
 
     public void moveToDest (int destX, int destY, double temps){
@@ -117,12 +91,24 @@ public class Fish {
 	return (int)coord_y;
     }
 
+    public int getDestX(){
+	return (int)dest_x;
+    }
+    
+    public int getDestY(){
+	return (int)dest_y;
+    }
+
     public int getSizeX(){
 	return size_x;
     }
 
     public int getSizeY(){
 	return size_y;
+    }
+
+    public double getTimetoDest(){
+	return this.timetoDest;
     }
 
     public Boolean getInversed(){
