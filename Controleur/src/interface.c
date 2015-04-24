@@ -9,7 +9,7 @@
 
 
 #define ARGUMENT_SIZE 10
-#define BUFFER_SIZE 256
+#define BUFFER_SIZE 1024
 
 // fonctions internes
 char** parse_command(char* buffer);
@@ -83,6 +83,18 @@ char** parse_command(char* buffer)
 }
 
 
+void parse_coord(char* argument, int* coord_x, int* coord_y){
+  *coord_x = atoi(argument);
+
+  for (int i = 0; argument[i] != '\0'; i++){
+    if (argument[i] == 'x'){
+      *coord_y = atoi(argument + i + 1);
+      return;
+    }
+  }
+}
+
+
 char* parse_display_msg(char** arguments, struct aquarium *aquarium, struct display *display)
 {
   char* buffer = malloc(BUFFER_SIZE);
@@ -106,15 +118,36 @@ char* parse_display_msg(char** arguments, struct aquarium *aquarium, struct disp
     }
   else if (strcmp(arguments[0], "status") == 0) 
     {
-      
+      fish__status(aquarium, buffer, BUFFER_SIZE);
     }
   else if (strcmp(arguments[0], "addFish") == 0) 
     {
-      
+      if (arguments[1] && arguments[2] && arguments[3] && arguments[4] && arguments[5]){
+	struct fish* fish = fish__create_fish(strdup(arguments[1]));
+	parse_coord(arguments[3], &fish->target_x, &fish->target_y);
+	parse_coord(arguments[4], &fish->size_x, &fish->size_y);
+	//TODO modele de mobilité
+	fish__add_fish(aquarium, fish);
+
+	snprintf(buffer,BUFFER_SIZE,"OK\n");
+      }
+      else{
+	snprintf(buffer,BUFFER_SIZE,"NOK : nécessite 5 arguments\n");
+      }
     }
-  else if (strcmp(arguments[0], "delfish") == 0)
+  else if (strcmp(arguments[0], "delFish") == 0)
     {
-      
+      if (arguments[1]){
+	if (fish__remove_fish(aquarium, arguments[1])){
+	  snprintf(buffer,BUFFER_SIZE,"OK\n");
+	}
+	else{
+	  snprintf(buffer,BUFFER_SIZE,"NOK : poisson inexistant\n");
+	}
+      }
+      else{
+	snprintf(buffer,BUFFER_SIZE,"NOK : manque un argument\n");
+      }
     }
   else if (strcmp(arguments[0], "startFish") == 0)
     {

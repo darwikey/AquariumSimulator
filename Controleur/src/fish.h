@@ -25,6 +25,12 @@ void fish__init_aquarium(struct aquarium* a);
 //add a fish in the aquarium
 void fish__add_fish(struct aquarium* a, struct fish* f);
 
+// supprime un poisson de l'aquarium, retourne 1 en cas de succés
+int fish__remove_fish(struct aquarium* a, char* fish_name);
+
+// rempli un buffer avec la liste des poissons dans l'aquarium
+void fish__status(struct aquarium* a, char* buffer, int buffer_length);
+
 // met a jour la position des poissons
 void fish__update(struct aquarium* a);
 
