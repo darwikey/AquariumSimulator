@@ -29,8 +29,14 @@ void network__launch(uint16_t port_number, struct aquarium* aquarium){
     perror("socket()");
     exit(errno);
   }
-  
-  
+
+ 
+  // supprime le message "Address already in use"
+  int yes = 1;
+  if(setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1) {
+    perror("setsockopt");
+  }   
+ 
   memset(&dest, 0, sizeof(dest));    
   dest.sin_family = AF_INET;
   dest.sin_addr.s_addr = htonl(INADDR_ANY);
