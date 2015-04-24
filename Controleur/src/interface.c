@@ -98,7 +98,11 @@ char* parse_display_msg(char** arguments, struct aquarium *aquarium, struct disp
     }
   else if (strcmp(arguments[0], "ping") == 0) 
     {
-      
+        if (arguments[1]){
+            snprintf(buffer,BUFFER_SIZE,"pong %s\n",arguments[1]);
+        }else{
+            snprintf(buffer,BUFFER_SIZE,"pong\n");
+        }
     }
   else if (strcmp(arguments[0], "status") == 0) 
     {
