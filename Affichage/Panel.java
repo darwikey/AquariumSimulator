@@ -72,6 +72,16 @@ public class Panel extends JPanel {
         	e.printStackTrace();
         }                
     }
+
+    public void updateListFish(LinkedList<Fish> lf) {
+	for (int i =0; i < listFish.size(); i++){
+	    if(listFish.get(i).getHasArrived()){
+		listFish.get(i).updateFish(lf.get(i));
+	    }
+	}	    //	listFish.clear();
+	    //listFish = lf;	
+
+    }
     
  
     

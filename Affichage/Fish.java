@@ -5,13 +5,15 @@ public class Fish {
     private int size_y;
     private double coord_x;
     private double coord_y;
-    private double speed;
+    // private double speed;
     private double dest_x;
     private double dest_y;
-    private double timetoDest;
+    private double timeToDest;
     private boolean inversed;
     private double dist_x;
     private double dist_y;
+    
+    private boolean hasArrived = false; 
 
     public Fish(String fishType, int size_x, int size_y, int dest_x, int dest_y, double time){
 
@@ -26,7 +28,7 @@ public class Fish {
 	this.dist_x = dest_x - coord_x;
 	this.dist_y =  dest_y - coord_y;
 	//	this.speed = l/time; // pixels/seconde ?
-	this.timetoDest = time;
+	this.timeToDest = time;
 	this.inversed = false;
     }
      
@@ -36,7 +38,7 @@ public class Fish {
 	str += "Fish name: " + fishType + "\n";
 	str += "Fish coords: " + coord_x + " " + coord_y + "\n";
 	str += "Fish size: " + size_x + " " + size_y + "\n";
-	str += "Fish speed: " + speed + "\n";
+	//str += "Fish speed: " + speed + "\n";
 	
 	return str;
 	    
@@ -52,15 +54,17 @@ public class Fish {
 	//dx = dx / l) * time_elapsed * speed;
 	//   dy = (dy / l) * time_elapsed * speed;
 
-	    coord_x += dist_x/(timetoDest*1000/timeElapsed);
-	    coord_y += dist_y/(timetoDest*1000/timeElapsed);
+	    coord_x += dist_x/(timeToDest*1000/timeElapsed);
+	    coord_y += dist_y/(timeToDest*1000/timeElapsed);
+	} else {
+	    hasArrived = true;
 	}
     }
 
 
   
 
-    public void moveToDest (int destX, int destY, double temps){
+    /* public void moveToDest (int destX, int destY, double temps){
 	this.dest_x = (double)destX;
 	this.dest_y = (double)destY;
 
@@ -72,7 +76,7 @@ public class Fish {
 	this.speed = l / temps;
 
 	this.inversed = dx < 0.0;
-    }
+	}*/
   
 
     public boolean compareFish (Fish f){
@@ -106,9 +110,12 @@ public class Fish {
     public int getSizeY(){
 	return size_y;
     }
+    public boolean getHasArrived(){
+	return hasArrived;
+    }
 
-    public double getTimetoDest(){
-	return this.timetoDest;
+    public double getTimeToDest(){
+	return this.timeToDest;
     }
 
     public Boolean getInversed(){
@@ -123,5 +130,24 @@ public class Fish {
 	 size_y = a;
     }
 
+    public void sethasArrived(boolean b){
+	 hasArrived = b;
+    }
+ public void setDest_x(double dx){
+	 dest_x = dx;
+    }
+public void setDest_y(double dy){
+	 dest_y = dy;
+    }
+ public void setTimeToDest(double t){
+	 timeToDest = t;
+    }
+
+    public void updateFish(Fish f){
+	this.hasArrived = false;
+	this.dest_x = f.getDestX();
+	this.dest_y = f.getDestY();
+	this.timeToDest = f.getTimeToDest();
+    }
 
 }

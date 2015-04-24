@@ -7,60 +7,41 @@ import java.net.UnknownHostException;
 public class Client {
 
     public static Socket socket = null;
-    // public static Thread t1;
+    public static Thread t1;
     //private PrintWriter out = null;
     //private BufferedReader in = null;
 
     private String idClient;
     private String listFishString;
     
-    
+    //list [PoissonRouge at 90x4,20x20,5]    
+
     public static void main(String[] args) {
 	Parser p = new Parser();
 	p.parse();
 	Window w = new Window(p.getFishes());
+	System.out.println("je sors de window");
 
+	ReadCfg rc = new ReadCfg("Affichage.cfg");
+	rc.read();
+	 
+	try {
+	socket = new Socket(rc.getControllerAdress(),rc.getControllerPort());
+	System.out.println("je sors socket");
+	
+	t1 = new Thread(new Connexion(socket, rc));
+	t1.start();
 
-		try {
-		ReadCfg rc = new ReadCfg("Affichage.cfg");
-		rc.read();
-	    		
-		socket = new Socket(rc.getControllerAdress(),rc.getControllerPort());
-	    
-		out = new PrintWriter(socket.getOutputStream());
-		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));	
-	    
-		if (rc.getId().equals(""))
-		out.println("hello");
-		else
-		out.println("hello in as "+rc.getId());
-
-		out.flush();
-	    
-		if (in.readLine().compareTo("no greeting") == 0)
-		System.out.println("fin de connexion");
-		else{
-		//Il faut prendre le nouvelle identifiant
-		idClient = 0;
-		}
-	    
-		out.println("getFishesContinuously");
-		out.flush();
-	    
-		listFishString = in.readLine();
-	    
-	    
-		//t2 = new Thread(new Chat_ClientServeur(socket));
-		//t2.start();
-	    
-	    
-
-		} catch (UnknownHostException e) {
+	} catch (UnknownHostException e) {
 		System.err.println("Can not connect to the address "+socket.getLocalAddress());
-		} catch (IOException e) {
+	}catch (IOException e) {
+	    
+	    System.err.println("No server listening port "+socket.getLocalPort());
+	}
 
-		System.err.println("No server listening port "+socket.getLocalPort());
-		}
+	w.autoRepaint();
+	
+
 	
     }
     

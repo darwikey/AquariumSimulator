@@ -46,6 +46,11 @@ public class Window extends JFrame {
 	//listFish.add(myFish);
 	//autoRepaint();
     }  
+
+    public void updateListFish(LinkedList<Fish> lf) {
+	pan.updateListFish(lf);
+
+    }
    
 	
  
