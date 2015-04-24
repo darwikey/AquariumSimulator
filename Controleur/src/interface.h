@@ -1,11 +1,13 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 #include "fish.h"
+#include "graph.h"
 
 struct display {
-int get_fish_continously;
-int log_out;
-char *buffer;//à libérer et réallouer à chaque fois lecture/écriture
+    int get_fish_continously;
+    int log_out;
+    char *buffer;//à libérer et réallouer à chaque fois lecture/écriture
+    node* node;
 };
 
 void interface__wait_user_input(struct aquarium*);
