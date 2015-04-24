@@ -24,8 +24,8 @@ public class Parser {
 
     public String parse(){
 	str = sc.nextLine(); 
-    	
-	int size_x = 0, size_y = 0, coord_x = 0, coord_y = 0, speed = 0;
+    	double time = 0.0;
+	int size_x = 0, size_y = 0, coord_x = 0, coord_y = 0;
 	String[] parts = str.split("[, ]");
 	for (int j=0 ; j < parts.length ; j++) {
 	    parts[j] = parts[j].replace("[","");
@@ -96,8 +96,8 @@ public class Parser {
 		    break;
 		
 		case 0:
-		    speed = Integer.parseInt(parts[j]);
-		    fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y, speed));
+		    time = Integer.parseInt(parts[j]);
+		    fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y, time));
 		    break;
 	
 		}
@@ -111,7 +111,7 @@ public class Parser {
 
 
 	else if (parts[0].compareTo("list") == 0){
-
+	    System.out.println("coucou");
 	    // stocking information into memory
 	    for (int j=1 ; j < parts.length ; j++) {
 	 
@@ -133,8 +133,8 @@ public class Parser {
 		    break;
 		
 		case 0:
-		    speed = Integer.parseInt(parts[j]);
-		    fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y, speed));
+		    time = Double.parseDouble(parts[j]);
+		    fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y, time));
 		    break;
 	
 		}

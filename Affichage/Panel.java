@@ -18,7 +18,7 @@ public class Panel extends JPanel {
 
 
     public Panel (LinkedList <Fish> lf){
-    	listFish = new LinkedList <Fish> (lf);
+    	listFish = lf;
     	listNameFish = new LinkedList <String> ();
     	for (int i=0; i < lf.size();i++){
     		listNameFish.add(listFish.get(i).getFishType());
@@ -49,13 +49,16 @@ public class Panel extends JPanel {
         try {        	
         	img = ImageIO.read(new File("fond_ecran1.jpg"));
         	g.drawImage(img, 0, 0, tailleEcranX, tailleEcranY, this);
-        	
+		
+
         	for (int i =0; i < listFish.size(); i++){
+		    
         		img = ImageIO.read(new File(listFish.get(i).getFishType()+".png"));
-        		posX = listFish.get(i).getPosX();
-        		posY = listFish.get(i).getPosY();				
-        		tailleX = (int) (((float)(listFish.get(i).getSizeX())/100) * tailleEcranX);
-        		tailleY = (int) (((float)(listFish.get(i).getSizeY())/100) * tailleEcranY);    		
+        		posX = listFish.get(i).getPosX() * tailleEcranX / 100;
+        		posY = listFish.get(i).getPosY() * tailleEcranY / 100;
+
+        		tailleX = listFish.get(i).getSizeX() * tailleEcranX / 100;
+        		tailleY = listFish.get(i).getSizeY() * tailleEcranY / 100;    		
       		
         		if (listFish.get(i).getInversed()){
         			g.drawImage(img, posX+tailleX, posY, -tailleX, tailleY, this);

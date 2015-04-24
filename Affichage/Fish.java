@@ -3,30 +3,34 @@ public class Fish {
     private String fishType;
     private int size_x;
     private int size_y;
-    private int coord_x;
-    private int coord_y;
-    private int speed;
+    private double coord_x;
+    private double coord_y;
+    private double speed;
+    private double dest_x;
+    private double dest_y;
+    private double timetoDest;
     private boolean inversed;
+    private double dist_x;
+    private double dist_y;
 
-    public Fish(String fishType, int size_x, int size_y, int coord_x, int coord_y, int speed){
+    public Fish(String fishType, int size_x, int size_y, int dest_x, int dest_y, double time){
+
+
 	this.fishType = fishType;
 	this.size_x = size_x;
 	this.size_y = size_y;
-	this.coord_x = coord_x;
-	this.coord_y = coord_y;
-	this.speed = speed;
+	this.coord_x = 50;
+	this.coord_y = 50;
+	this.dest_x = dest_x;
+	this.dest_y = dest_y;
+	this.dist_x = dest_x - coord_x;
+	this.dist_y =  dest_y - coord_y;
+	//	this.speed = l/time; // pixels/seconde ?
+	this.timetoDest = time;
 	this.inversed = false;
     }
-    
-    public void setInversed(boolean b){
-    	this.inversed = b;
-    }
-    
-    public boolean getInversed(){
-    	return this.inversed;
-    }
-    
-
+     
+ 
     public String toString(){
 	String str = "";
 	str += "Fish name: " + fishType + "\n";
@@ -39,35 +43,37 @@ public class Fish {
     }
 
     //Return time repaint
-    public int move (int destX, int destY, float temps){
+    public void move (int timeElapsed){
 
-	int dx = Math.abs (destX-coord_x);
- 	int dy = Math.abs (destY-coord_y);
-	int maxDistance = 0;
-
-	if(dx<dy)
-	    maxDistance = dy;
-	else 
-	    maxDistance = dx;
-
-	int timeRepaint = (int) ((temps/maxDistance) *1000);
 	
-	
-	while (coord_x != destX && coord_y !=destY){
-	    if (coord_x > destX)
-		coord_x--;
-	    if (coord_x < destX)
-		coord_x++;
-	    if (coord_y > destY)
-		coord_y--;
-	    if (coord_y < destY)
-		coord_y++;
-	    
+	if (Math.abs(dest_x-coord_x) > 1.0 || Math.abs(dest_y-coord_y) > 1.0){
+
+	    //System.out.println("move");
+	//dx = dx / l) * time_elapsed * speed;
+	//   dy = (dy / l) * time_elapsed * speed;
+
+	    coord_x += dist_x/(timetoDest*1000/timeElapsed);
+	    coord_y += dist_y/(timetoDest*1000/timeElapsed);
 	}
-	return timeRepaint;	
-	
     }
 
+
+  
+
+    public void moveToDest (int destX, int destY, double temps){
+	this.dest_x = (double)destX;
+	this.dest_y = (double)destY;
+
+	double dx = dest_x - coord_x;
+	double dy = dest_x - coord_y;
+
+	double l = Math.sqrt(dx * dx + dy * dy);
+	
+	this.speed = l / temps;
+
+	this.inversed = dx < 0.0;
+    }
+  
 
     public boolean compareFish (Fish f){
 	return (fishType.equals(f.getFishType()));
@@ -78,11 +84,19 @@ public class Fish {
     }
 
     public int getPosX(){
-	return coord_x;
+	return (int)coord_x;
     }
 
     public int getPosY(){
-	return coord_y;
+	return (int)coord_y;
+    }
+
+    public int getDestX(){
+	return (int)dest_x;
+    }
+    
+    public int getDestY(){
+	return (int)dest_y;
     }
 
     public int getSizeX(){
@@ -93,13 +107,12 @@ public class Fish {
 	return size_y;
     }
 
-
-    public void setPosX(int a){
-	coord_x = a;
+    public double getTimetoDest(){
+	return this.timetoDest;
     }
 
-    public void setPosY(int a){
-	 coord_y = a;
+    public Boolean getInversed(){
+	return inversed;
     }
 
     public void setSizeX(int a){
@@ -109,8 +122,6 @@ public class Fish {
     public void setSizeY(int a){
 	 size_y = a;
     }
-
-    
 
 
 }
