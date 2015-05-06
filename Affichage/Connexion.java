@@ -33,6 +33,7 @@ public class Connexion implements Runnable {
 
 	System.out.println("je rentre dans run");
 	try {
+	    
 	    System.out.println("je rentre dans le try");
 	    
 	    out = new PrintWriter(socket.getOutputStream());
@@ -48,35 +49,35 @@ public class Connexion implements Runnable {
 	    
 	    out.flush();
 	    String stock = in.readLine();
-	    
+	    //System.out.println(stock);	
+
 	    if (stock.compareTo("no greeting") == 0){
-	    	System.out.println("connex1: "+stock);		
+	    	System.out.println("connex1: "+stock);	
+		
 	    }	    
 	    else{
 	    	System.out.println("connex2: "+stock);
-	    	idClient = p.parseGreeting(stock);
+	    	//idClient = p.parseGreeting(stock);
 	    }
 
 	    out.println("getFishesContinuously");
 	    out.flush();
 		
 	    System.out.println("iii");
+	    LinkedList <Fish> listFishes = p.parseFishList(listFishString);  
 	    
-	    listFishString = in.readLine();
-	    LinkedList <Fish> listFishes = p.parseListFish(listFishString);  
+	    listFishString = in.readLine();	    
 	    System.out.println("1 "+listFishes.size());
 	    w.initListFish(listFishes);
 	    
-	    
+	    int i = 1;
+	    while (true){
+		i++;
 	    listFishString = in.readLine();
-	    listFishes = p.parseListFish(listFishString); 
-	    System.out.println("2 "+listFishes.size());
-	    w.updateListFish(listFishes);
-	    
-	    listFishString = in.readLine();
-	    listFishes = p.parseListFish(listFishString); 
-	    System.out.println("3 "+listFishes.size());
-	    w.updateListFish(listFishes);
+	    listFishes = p.parseFishList(listFishString); 
+	    System.out.println(i+" "+listFishes.size());
+	    w.updateFishList(listFishes);
+	    }
 
 	    
 	} catch (UnknownHostException e) {
