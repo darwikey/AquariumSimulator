@@ -93,6 +93,7 @@ printf("sock : %d  (%s)\n",sock, (sock == INVALID_SOCKET) ? "not ok" : "ok");
 
   char buffer[BUFFER_SIZE + 1]; // +1 so we can add null terminator  
   int used_buffer = 0;//number of char used in buffer
+
   while (!display.log_out){
       int lenght = recv(client_sock, buffer+used_buffer, BUFFER_SIZE - used_buffer, MSG_DONTWAIT);
       if (lenght >= 0){

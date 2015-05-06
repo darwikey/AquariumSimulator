@@ -18,6 +18,16 @@ char* parse_user_msg(char** arguments, struct aquarium*);
 void* task_user_input(void* aquarium);
 
 
+//copie une chaine de caractere
+char* str_copy (const char *s) {
+  char *d = malloc (strlen (s) + 1);
+  if (d == NULL) 
+    return NULL;
+  strcpy (d,s);
+  return d;
+}
+
+
 void interface__wait_user_input(struct aquarium* aquarium)
 {
   static pthread_t thread;
@@ -106,26 +116,27 @@ char* parse_display_msg(char** arguments, struct aquarium *aquarium, struct disp
     }
   else if (strcmp(arguments[0], "hello") == 0) 
     {
-        char * name = NULL;
-        if (arguments[1] != NULL && arguments[2] != NULL && arguments[3] != NULL){
-            if (strcmp(arguments[1],"in") || strcmp(arguments[2],"as")){
-                fprintf(stderr,"warning :arguments %s %s %s invalides pour la commande %s\ntrying anyway\n",arguments[1], arguments[2],arguments[3], arguments[0]);
-            }
-            name = arguments[3];
-        }//the number of argument may not be good. add a warning message ?
-        display->node = graph__get_not_connected_node(aquarium->graph, name);
-        printf("2\n");
-        name = graph__get_node_name(aquarium->graph, display->node);
-        if(display->node){
-            graph__node_connect(aquarium->graph, display->node);
-        }
-
-        if (name){
-            snprintf(buffer,BUFFER_SIZE,"greeting %s\n",name);
-        }else{
-            snprintf(buffer,BUFFER_SIZE,"no greeting");
-        }
+      char * name = NULL;
+      if (arguments[1] != NULL && arguments[2] != NULL && arguments[3] != NULL && strcmp(arguments[1],"in") == 0 && strcmp(arguments[2],"as") == 0){
+	name = arguments[3];
+    
+	display->node = graph__get_not_connected_node(aquarium->graph, name);
+	
+	name = graph__get_node_name(aquarium->graph, display->node);
+	if(display->node){
+	  graph__node_connect(aquarium->graph, display->node);
+	}
+	
+      }
+      if (name){
+	snprintf(buffer,BUFFER_SIZE,"greeting %s\n",name);
+      }
+      else{
+	snprintf(buffer,BUFFER_SIZE,"no greeting");
+      }
+      
     }
+  
   else if (strcmp(arguments[0], "ping") == 0) 
     {
         if (arguments[1]){
@@ -141,7 +152,7 @@ char* parse_display_msg(char** arguments, struct aquarium *aquarium, struct disp
   else if (strcmp(arguments[0], "addFish") == 0) 
     {
       if (arguments[1] && arguments[2] && arguments[3] && arguments[4] && arguments[5]){
-	struct fish* fish = fish__create_fish(strdup(arguments[1]));
+	struct fish* fish = fish__create_fish(str_copy(arguments[1]));
 	parse_coord(arguments[3], &fish->target_x, &fish->target_y);
 	parse_coord(arguments[4], &fish->size_x, &fish->size_y);
 	//TODO modele de mobilité
