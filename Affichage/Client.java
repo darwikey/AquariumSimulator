@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.LinkedList;
 
 
 
@@ -8,29 +9,22 @@ public class Client {
 
     public static Socket socket = null;
     public static Thread t1;
-    //private PrintWriter out = null;
-    //private BufferedReader in = null;
-
-    private String idClient;
-    private String listFishString;
     
     //list [PoissonRouge at 90x4,20x20,5]    
 
     public static void main(String[] args) {
-	Parser p = new Parser();
-	p.parse();
-	Window w = new Window(p.getFishes());
-	System.out.println("je sors de window");
+
+	Window w = new Window();
 
 	ReadCfg rc = new ReadCfg("Affichage.cfg");
 	rc.read();
 	 
 	try {
-	socket = new Socket(rc.getControllerAdress(),rc.getControllerPort());
-	System.out.println("je sors socket");
+		socket = new Socket(rc.getControllerAdress(),rc.getControllerPort());
+		System.out.println("je sors socket");
 	
-	t1 = new Thread(new Connexion(socket, rc));
-	t1.start();
+		t1 = new Thread(new Connexion(socket, rc, w));
+		t1.start();
 
 	} catch (UnknownHostException e) {
 		System.err.println("Can not connect to the address "+socket.getLocalAddress());
@@ -38,10 +32,8 @@ public class Client {
 	    
 	    System.err.println("No server listening port "+socket.getLocalPort());
 	}
-
-	w.autoRepaint();
 	
-
+	w.autoRepaint();
 	
     }
     
