@@ -9,6 +9,7 @@ typedef Agnode_t node;
 
 int  graph__load(char* path, struct graph**);
 void graph__show(struct graph*, FILE* std_out);
+
 /**
  * @return 1 if errors
  */
@@ -20,6 +21,7 @@ void graph__free(struct graph **);
 
 void graph__node_connect(struct graph *g, node* node);
 void graph__node_disconnect(struct graph *g, node* node);
+
 /**
  * get a name of an unconnected node in the graph.
  * @param prefered_name if not NULL, the return name try to match this one.
