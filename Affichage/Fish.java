@@ -1,83 +1,58 @@
+import java.util.LinkedList;
+
 public class Fish {
 
     private String fishType;
     private int size_x;
     private int size_y;
-    private double coord_x;
-    private double coord_y;
-    // private double speed;
-    private double dest_x;
-    private double dest_y;
+    private Point coord;
     private double timeToDest;
     private boolean inversed;
     private double dist_x;
     private double dist_y;
     
-    private boolean hasArrived = false; 
+    private LinkedList <Point> nextDest;
+     
+    private boolean hasArrived; 
+    public static boolean oneFishHasArrived = false; 
 
     public Fish(String fishType, int size_x, int size_y, int dest_x, int dest_y, double time){
-
-
-	this.fishType = fishType;
-	this.size_x = size_x;
-	this.size_y = size_y;
-	this.coord_x = 50;
-	this.coord_y = 50;
-	this.dest_x = dest_x;
-	this.dest_y = dest_y;
-	this.dist_x = dest_x - coord_x;
-	this.dist_y =  dest_y - coord_y;
-	//	this.speed = l/time; // pixels/seconde ?
-	this.timeToDest = time;
-	this.inversed = false;
+    	nextDest = new LinkedList <Point> ();
+    	nextDest.add(new Point (dest_x,dest_y));
+    	this.hasArrived = false;
+    	this.fishType = fishType;
+    	this.size_x = size_x;
+		this.size_y = size_y;
+		this.coord = new Point (0,0);
+		this.dist_x = nextDest.getFirst().x - coord.x;
+		this.dist_y =  nextDest.getFirst().y - coord.y;
+		this.timeToDest = time;
+		this.inversed = false;
     }
      
- 
-    public String toString(){
-	String str = "";
-	str += "Fish name: " + fishType + "\n";
-	str += "Fish coords: " + coord_x + " " + coord_y + "\n";
-	str += "Fish size: " + size_x + " " + size_y + "\n";
-	//str += "Fish speed: " + speed + "\n";
-	
-	return str;
-	    
-    }
-
     //Return time repaint
     public void move (int timeElapsed){
+    	if (nextDest.size() == 0){   
+    		hasArrived = true;
+    		System.out.println("finished");
+    	} else {    	
+	    	if (Math.abs(nextDest.getFirst().x-coord.x) > 1.0 || Math.abs(nextDest.getFirst().y-coord.y) > 1.0){		
+	    		coord.x += dist_x/(timeToDest*1000/timeElapsed);
+	    		coord.y += dist_y/(timeToDest*1000/timeElapsed);
 
-	
-	if (Math.abs(dest_x-coord_x) > 1.0 || Math.abs(dest_y-coord_y) > 1.0){
-
-	    //System.out.println("move");
-	//dx = dx / l) * time_elapsed * speed;
-	//   dy = (dy / l) * time_elapsed * speed;
-
-	    coord_x += dist_x/(timeToDest*1000/timeElapsed);
-	    coord_y += dist_y/(timeToDest*1000/timeElapsed);
-	} else {
-	    hasArrived = true;
-	}
+	    	} else {
+	    		nextDest.removeFirst();	    		
+	    		
+	    		System.out.println("remaining destination for "+fishType+" "+ nextDest.size());
+	    		
+	    		//Update distance
+	    		if (nextDest.size() > 0){ 
+	    			this.dist_x = nextDest.getFirst().x - coord.x;
+	    			this.dist_y =  nextDest.getFirst().y - coord.y;
+	    		}
+	    	}
+    	}
     }
-
-
-  
-
-    /* public void moveToDest (int destX, int destY, double temps){
-	this.dest_x = (double)destX;
-	this.dest_y = (double)destY;
-
-	double dx = dest_x - coord_x;
-	double dy = dest_x - coord_y;
-
-	double l = Math.sqrt(dx * dx + dy * dy);
-	
-	this.speed = l / temps;
-
-	this.inversed = dx < 0.0;
-	}*/
-  
 
     public boolean compareFish (Fish f){
 	return (fishType.equals(f.getFishType()));
@@ -87,21 +62,10 @@ public class Fish {
 	return fishType;
     }
 
-    public int getPosX(){
-	return (int)coord_x;
+    public Point getCoord(){
+    	return coord;
     }
-
-    public int getPosY(){
-	return (int)coord_y;
-    }
-
-    public int getDestX(){
-	return (int)dest_x;
-    }
-    
-    public int getDestY(){
-	return (int)dest_y;
-    }
+   
 
     public int getSizeX(){
 	return size_x;
@@ -115,11 +79,15 @@ public class Fish {
     }
 
     public double getTimeToDest(){
-	return this.timeToDest;
+    	return this.timeToDest;
     }
 
     public Boolean getInversed(){
 	return inversed;
+    }
+    
+    public Point getDestination(){
+    	return this.nextDest.get(0);
     }
 
     public void setSizeX(int a){
@@ -133,21 +101,14 @@ public class Fish {
     public void sethasArrived(boolean b){
 	 hasArrived = b;
     }
- public void setDest_x(double dx){
-	 dest_x = dx;
-    }
-public void setDest_y(double dy){
-	 dest_y = dy;
-    }
- public void setTimeToDest(double t){
-	 timeToDest = t;
-    }
-
-    public void updateFish(Fish f){
-	this.hasArrived = false;
-	this.dest_x = f.getDestX();
-	this.dest_y = f.getDestY();
-	this.timeToDest = f.getTimeToDest();
-    }
+   
+	 public void setTimeToDest(double t){
+		 timeToDest = t;
+	    }
+	 
+	 public  void addNextDest (Point p){
+		 nextDest.add(p);
+	 }   
+    
 
 }
