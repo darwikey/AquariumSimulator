@@ -31,6 +31,9 @@ int fish__remove_fish(struct aquarium* a, char* fish_name);
 // rempli un buffer avec la liste des poissons dans l'aquarium
 void fish__status(struct aquarium* a, char* buffer, int buffer_length);
 
+//rempli un buffer avec la liste des poissons dans l'aquarium
+void fish__getFishes(struct aquarium* a, char* buffer, int buffer_length);
+
 // met a jour la position des poissons
 void fish__update(struct aquarium* a);
 

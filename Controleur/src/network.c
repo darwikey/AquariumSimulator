@@ -1,7 +1,11 @@
 #include "network.h"
 #include "pthread.h"
 #include "interface.h"
-#define BUFFER_SIZE 256
+#include <sys/time.h>
+#include <unistd.h>
+
+
+#define BUFFER_SIZE 2048
 #define LISTEN_MAX 5
 #define THREAD_NB 16
 
@@ -73,12 +77,7 @@ void* network__wait(void* parameter){
   struct thread_parameter *param = (struct thread_parameter*) parameter;
   
 
-  /*struct sockaddr_in client_addr;
-  memset(&client_addr, 0, sizeof(client_addr));    
-  
-  socklen_t client_addr_size = sizeof(client_addr);*/
-  
-printf("sock : %d  (%s)\n",sock, (sock == INVALID_SOCKET) ? "not ok" : "ok");
+  //printf("sock : %d  (%s)\n",sock, (sock == INVALID_SOCKET) ? "not ok" : "ok");
 
   int client_sock = accept(param->sock, NULL, NULL);
   if(client_sock == INVALID_SOCKET){
@@ -93,25 +92,43 @@ printf("sock : %d  (%s)\n",sock, (sock == INVALID_SOCKET) ? "not ok" : "ok");
 
   char buffer[BUFFER_SIZE + 1]; // +1 so we can add null terminator  
   int used_buffer = 0;//number of char used in buffer
+  
+  struct timeval get_fish_timer;
+  gettimeofday(&get_fish_timer, NULL);
 
   while (!display.log_out){
-      int lenght = recv(client_sock, buffer+used_buffer, BUFFER_SIZE - used_buffer, MSG_DONTWAIT);
-      if (lenght >= 0){
-          /* We have to null terminate the received data ourselves */
-          buffer[lenght+used_buffer] = '\0';
-          for (char* current = buffer+used_buffer; *current != '\0'; current ++){
+
+    struct timeval timer;
+    gettimeofday(&timer, NULL);
+    if (display.get_fish_continously && timer.tv_sec > get_fish_timer.tv_sec + 1){
+      // reset du timer
+      gettimeofday(&get_fish_timer, NULL);
+      char tmp[BUFFER_SIZE];
+      fish__getFishes(param->aquarium, tmp, BUFFER_SIZE);
+      write(client_sock, tmp, strlen(tmp));
+    }
+
+      int length = recv(client_sock, buffer+used_buffer, BUFFER_SIZE - used_buffer, MSG_DONTWAIT);
+
+      if (length >= 0){
+    	  // We have to null terminate the received data ourselves 
+          buffer[length+used_buffer] = '\0';
+          
+	  for (char* current = buffer+used_buffer; *current != '\0'; current ++){
               if (*current == '\r'){
                   printf("enfer et damnation ! il y a un \\r ! on est sous linux pourtant!\npour éviter ce problème on utilise une solution instable (cf %s ligne %d)\n", __FILE__, __LINE__);
                   *current = '\0';
               }
+
               if (*current == '\n'){
                   *current = '\0';
                   char * result = interface__compute_display_input(param->aquarium, &display, buffer);
                   write(client_sock, result, strlen(result));//TODO check for errors
                   free(result);
+
                   //then copy the chars after the \n to the start of buffer
                   used_buffer = 0;
-                  lenght = 0;
+                  length = 0;
                   for (current ++; *current !='\0';current ++){
                       buffer[used_buffer] = *current;
                       used_buffer ++;
@@ -121,9 +138,9 @@ printf("sock : %d  (%s)\n",sock, (sock == INVALID_SOCKET) ? "not ok" : "ok");
               }
           }
 
-          used_buffer += lenght;
+          used_buffer += length;
       }
-      sleep(1);//to be removed
+      usleep(100);//to be removed
   }
 
   close(client_sock);

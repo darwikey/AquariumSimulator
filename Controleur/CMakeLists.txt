@@ -9,7 +9,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -lcgraph -lpthread" )
 
-add_definitions(-std=c99 -g -Wall)
+add_definitions(-std=c99 -g -Wall -D _BSD_SOURCE)
 
   
 file(GLOB_RECURSE source_files src/*.c)

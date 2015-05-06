@@ -145,10 +145,12 @@ char* parse_display_msg(char** arguments, struct aquarium *aquarium, struct disp
             snprintf(buffer,BUFFER_SIZE,"pong\n");
         }
     }
+
   else if (strcmp(arguments[0], "status") == 0) 
     {
       fish__status(aquarium, buffer, BUFFER_SIZE);
     }
+
   else if (strcmp(arguments[0], "addFish") == 0) 
     {
       if (arguments[1] && arguments[2] && arguments[3] && arguments[4] && arguments[5]){
@@ -164,6 +166,7 @@ char* parse_display_msg(char** arguments, struct aquarium *aquarium, struct disp
 	snprintf(buffer,BUFFER_SIZE,"NOK : nécessite 5 arguments\n");
       }
     }
+
   else if (strcmp(arguments[0], "delFish") == 0)
     {
       if (arguments[1]){
@@ -178,10 +181,18 @@ char* parse_display_msg(char** arguments, struct aquarium *aquarium, struct disp
 	snprintf(buffer,BUFFER_SIZE,"NOK : manque un argument\n");
       }
     }
+
   else if (strcmp(arguments[0], "startFish") == 0)
     {
       
     }
+
+  else if (strcmp(arguments[0], "getFishesContinuously") == 0)
+    {
+      display->get_fish_continously = 1;
+      snprintf(buffer, BUFFER_SIZE, "OK\n");
+    }
+
   else
     {
       snprintf(buffer, BUFFER_SIZE, "NOK : commande (%s) introuvable\n", arguments[0]);
