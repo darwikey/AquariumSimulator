@@ -71,8 +71,37 @@ void fish__status(struct aquarium* a, char* buffer, int buffer_length){
       buffer_length -= n;
     }
     else{
-      break;
+      return;
     }
+  }
+
+  if (buffer_length > 1){
+    buffer[0] = '\n';
+  }
+}
+
+
+void fish__getFishes(struct aquarium* a, char* buffer, int buffer_length){
+
+  int n = snprintf(buffer, buffer_length, "fish");
+  buffer += n;
+  buffer_length -= n;
+
+  for (int i = 0; i < a->fish_number; i++){
+    struct fish* f = a->fishs[i];
+    int n = snprintf(buffer, buffer_length, " [%s at %dx%d,%dx%d,%d]", f->name, f->target_x, f->target_y, f->size_x, f->size_y, f->delay);
+
+    if (n > 0 && n < buffer_length){
+      buffer += n;
+      buffer_length -= n;
+    }
+    else{
+      return;
+    }
+  }
+
+  if (buffer_length > 1){
+    buffer[0] = '\n';
   }
 }
 
