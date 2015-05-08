@@ -83,7 +83,7 @@ void fish__status(struct aquarium* a, char* buffer, int buffer_length){
 
 void fish__getFishes(struct aquarium* a, char* buffer, int buffer_length){
 
-  int n = snprintf(buffer, buffer_length, "fish");
+  int n = snprintf(buffer, buffer_length, "list");
   buffer += n;
   buffer_length -= n;
 
@@ -116,7 +116,7 @@ void fish__update(struct aquarium* a){
 	 a->fishs[i]->target_x = rand() % 100;
 	 a->fishs[i]->target_y = rand() % 100;
 
-	 a->fishs[i]->delay = rand() % 5 + 1;
+	 a->fishs[i]->delay = rand() % 5 + 3;
       }
     }
 
