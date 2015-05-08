@@ -105,10 +105,9 @@ public class Fish {
 	 public void setTimeToDest(double t){
 		 timeToDest = t;
 	    }
-	 
-	 public  void addNextDest (Point p){
-		 nextDest.add(p);
-	 }   
-    
 
+    public void setDestination(Point p){
+	coord = p;
+    }
+	 
 }
