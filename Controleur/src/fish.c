@@ -20,6 +20,7 @@ struct fish* fish__create_fish(char* name){
   f->size_y = rand() % 7 + 4;
 
   f->delay = rand() % 5 + 1;
+  f->is_started = 0;
 
   return f;
 }
@@ -43,6 +44,17 @@ void fish__add_fish(struct aquarium* a, struct fish* f){
   }
 
   a->fishs[a->fish_number - 1] = f;
+}
+
+
+int fish__start_fish(struct aquarium* a, char* fish_name){
+  for (int i = 0; i < a->fish_number; i++){
+    if (strcmp(a->fishs[i]->name, fish_name) == 0){
+      a->fishs[i]->is_started = 1;
+      return 1;
+    }
+  }
+  return 0;
 }
 
 
@@ -114,6 +126,11 @@ void fish__update(struct aquarium* a){
 
   while(1){
     for (int i = 0; i < a->fish_number; i++){
+      
+      if (!a->fishs[i]->is_started){
+	continue;
+      }
+      
       a->fishs[i]->delay--;
 
       if (a->fishs[i]->delay <= 0){

@@ -8,6 +8,7 @@ struct fish{
   int size_x, size_y; //taille du poisson
   int delay; // delai en seconde avant update
   char* name;
+  int is_started;
 };
 
 struct aquarium{
@@ -24,6 +25,9 @@ void fish__init_aquarium(struct aquarium* a);
 
 //add a fish in the aquarium
 void fish__add_fish(struct aquarium* a, struct fish* f);
+
+// start the movement of a fish
+int fish__start_fish(struct aquarium* a, char* fish_name);
 
 // supprime un poisson de l'aquarium, retourne 1 en cas de succés
 int fish__remove_fish(struct aquarium* a, char* fish_name);

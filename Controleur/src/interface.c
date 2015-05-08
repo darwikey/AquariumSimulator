@@ -184,7 +184,17 @@ char* parse_display_msg(char** arguments, struct aquarium *aquarium, struct disp
 
   else if (strcmp(arguments[0], "startFish") == 0)
     {
-      
+      if (arguments[1]){
+	if (fish__start_fish(aquarium, arguments[1])){
+	  snprintf(buffer,BUFFER_SIZE,"OK\n");
+	}
+	else{
+	  snprintf(buffer,BUFFER_SIZE,"NOK : poisson inexistant\n");
+	}
+      }
+      else{
+	snprintf(buffer,BUFFER_SIZE,"NOK : manque un argument\n");
+      }
     }
 
   else if (strcmp(arguments[0], "getFishesContinuously") == 0)
