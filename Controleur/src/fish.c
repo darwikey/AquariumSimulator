@@ -48,12 +48,14 @@ void fish__add_fish(struct aquarium* a, struct fish* f){
 
 int fish__remove_fish(struct aquarium* a, char* fish_name){
   for (int i = 0; i < a->fish_number; i++){
-    if (a->fishs[i]->name){
+    if (strcmp(a->fishs[i]->name, fish_name) == 0){
       free(a->fishs[i]);
 
       for (int j = i; j < a->fish_number - 1; j++){
 	a->fishs[i] = a->fishs[i+1];
       }
+
+      a->fish_number--;
       return 1;
     }
   }
@@ -75,8 +77,9 @@ void fish__status(struct aquarium* a, char* buffer, int buffer_length){
     }
   }
 
-  if (buffer_length > 1){
+  if (buffer_length > 2){
     buffer[0] = '\n';
+    buffer[1] = '\0';
   }
 }
 
@@ -100,8 +103,9 @@ void fish__getFishes(struct aquarium* a, char* buffer, int buffer_length){
     }
   }
 
-  if (buffer_length > 1){
+  if (buffer_length > 2){
     buffer[0] = '\n';
+    buffer[1] = '\0';
   }
 }
 
