@@ -16,14 +16,14 @@ public class Fish {
     private boolean hasArrived; 
     public static boolean oneFishHasArrived = false; 
 
-    public Fish(String fishType, int size_x, int size_y, int dest_x, int dest_y, double time){
+    public Fish(String fishType, int size_x, int size_y, int dest_x, int dest_y, double time, Point coord){
     	nextDest = new LinkedList <Point> ();
     	nextDest.add(new Point (dest_x,dest_y));
     	this.hasArrived = false;
     	this.fishType = fishType;
     	this.size_x = size_x;
 		this.size_y = size_y;
-		this.coord = new Point (0,0);
+		this.coord = coord;
 		this.dist_x = nextDest.getFirst().x - coord.x;
 		this.dist_y =  nextDest.getFirst().y - coord.y;
 		this.timeToDest = time;

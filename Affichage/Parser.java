@@ -10,6 +10,7 @@ public class Parser {
     LinkedList<Fish> fishes = new LinkedList<Fish>();
     //String str = new String();
     Scanner sc;
+    private LinkedList <Juhnytg> fishPositions = null;
 
     public Parser(){
 	sc = new Scanner(System.in);
@@ -206,7 +207,32 @@ public class Parser {
 		
 	    case 0:
 		speed = Integer.parseInt(parts[j]);
-		fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y, speed));
+		if (fishPositions == null){
+		    System.out.println("coucou");
+		    fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y, speed, new Point(0,0)));
+		}
+
+		else {
+
+		    boolean found = false;
+		    for (int i = 0 ; i < fishPositions.size() ; i++){
+			if (fishType.compareTo(fishPositions.get(i).getFishType()) == 0){
+			    fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y, speed, fishPositions.get(i).getPos()));
+			    fishPositions.remove(i);
+			    found = true;
+			    break;
+			}
+		    }
+
+		    if (!found){
+			// un poisson arrive, soit nouvellement créé, posi aléatoire ? sinon arrive d'un bord ? info à donner.
+		    }
+
+		    
+		    
+		    
+		}
+		
 		break;
 	
 	    }
@@ -215,7 +241,11 @@ public class Parser {
 	
     }
 
+    public void fillPositionsList(LinkedList<Juhnytg> list){
+	
+	fishPositions = list;
 
+    }
 
     
 

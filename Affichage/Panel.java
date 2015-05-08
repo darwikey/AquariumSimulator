@@ -62,7 +62,7 @@
 	
 	        	for (int i =0; i < listFish.size(); i++){
 			    
-	        		img = ImageIO.read(new File(listFish.get(i).getFishType()+".jpg"));
+	        		img = ImageIO.read(new File("res/"+listFish.get(i).getFishType()+".png"));
 	        		posX = ((int)listFish.get(i).getCoord().x) * tailleEcranX / 100;
 	        		posY = ((int)listFish.get(i).getCoord().y) * tailleEcranY / 100;
 	        		
