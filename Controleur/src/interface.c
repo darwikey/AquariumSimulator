@@ -203,6 +203,14 @@ char* parse_display_msg(char** arguments, struct aquarium *aquarium, struct disp
       snprintf(buffer, BUFFER_SIZE, "OK\n");
     }
 
+  else if (strcmp(arguments[0], "log") == 0 &&
+          arguments[1] != NULL &&
+          strcmp(arguments[1], "out") == 0)
+  {
+      display->log_out = 1;
+      snprintf(buffer, BUFFER_SIZE, "bye\n");
+  }
+
   else
     {
       snprintf(buffer, BUFFER_SIZE, "NOK : commande (%s) introuvable\n", arguments[0]);
