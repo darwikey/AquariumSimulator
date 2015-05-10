@@ -8,6 +8,7 @@
 #define BUFFER_SIZE 2048
 #define LISTEN_MAX 5
 #define THREAD_NB 16
+#define LOG_OUT_DELAY 15
 
 struct thread_parameter{
   struct aquarium* aquarium;
@@ -96,6 +97,8 @@ void* network__wait(void* parameter){
   
   struct timeval get_fish_timer;
   gettimeofday(&get_fish_timer, NULL);
+  struct timeval last_interaction_timer;
+  last_interaction_timer = get_fish_timer;
 
   while (!display.log_out){
 
@@ -112,7 +115,8 @@ void* network__wait(void* parameter){
       int length = recv(client_sock, buffer+used_buffer, BUFFER_SIZE - used_buffer, MSG_DONTWAIT);
 
       if (length >= 0){
-    	  // We have to null terminate the received data ourselves 
+          gettimeofday(&last_interaction_timer,NULL);
+    	  // We have to null terminate the received data ourselves
           buffer[length+used_buffer] = '\0';
           
 	  for (char* current = buffer+used_buffer; *current != '\0'; current ++){
@@ -142,9 +146,14 @@ void* network__wait(void* parameter){
           used_buffer += length;
       }
       usleep(100);//to be removed
+      if (timer.tv_sec > last_interaction_timer.tv_sec+LOG_OUT_DELAY){
+        display.log_out = 1;
+        snprintf(buffer,BUFFER_SIZE,"pas d'interaction depuis %d secondes. La connexion va être intérompue.\nLa prochaine fois utilisez la commande ping\n",LOG_OUT_DELAY);
+        write(client_sock, buffer, strlen(buffer));//TODO check for errors
+      }
   }
-
-  graph__node_disconnect(param->aquarium->graph, display.node);
+  if (display.node)
+      graph__node_disconnect(param->aquarium->graph, display.node);
   close(client_sock);
   return NULL;
 }
