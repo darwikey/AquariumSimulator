@@ -131,18 +131,20 @@ void graph__free(struct graph**g){
 }
 
 
+static int graph__node_is_connected(struct graph*g, Agnode_t* node){
+    return strcmp(agxget(node,g->connect_attribute),"false");
+}
+
 void graph__node_connect(struct graph* g, node* node){
     assert(node != NULL);
+    assert(!graph__node_is_connected(g,node));
     agxset(node, g->connect_attribute ,"true");
 }
 
 void graph__node_disconnect(struct graph* g, node* node){
     assert(node != NULL);
-    agxset(node, g->connect_attribute, NULL);
-}
-
-static int graph__node_is_connected(struct graph*g, Agnode_t* node){
-    return strcmp(agxget(node,g->connect_attribute),"false");
+    assert(graph__node_is_connected(g,node));
+    agxset(node, g->connect_attribute, "false");
 }
 
 node* graph__get_not_connected_node(struct graph*g, char* prefered_name){

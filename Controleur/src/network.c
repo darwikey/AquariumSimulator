@@ -89,6 +89,7 @@ void* network__wait(void* parameter){
   display.get_fish_continously = 0;
   display.log_out = 0;
   display.buffer = NULL;
+  display.node = NULL;
 
   char buffer[BUFFER_SIZE + 1]; // +1 so we can add null terminator  
   int used_buffer = 0;//number of char used in buffer
@@ -143,6 +144,7 @@ void* network__wait(void* parameter){
       usleep(100);//to be removed
   }
 
+  graph__node_disconnect(param->aquarium->graph, display.node);
   close(client_sock);
   return NULL;
 }

@@ -120,6 +120,9 @@ char* parse_display_msg(char** arguments, struct aquarium *aquarium, struct disp
       if (arguments[1] != NULL && arguments[2] != NULL && arguments[3] != NULL && strcmp(arguments[1],"in") == 0 && strcmp(arguments[2],"as") == 0){
 	name = arguments[3];
       }
+      if (display->node){
+          graph__node_disconnect(aquarium->graph, display->node);
+      }
       display->node = graph__get_not_connected_node(aquarium->graph, name);
       name = graph__get_node_name(aquarium->graph, display->node);
       if(display->node){
