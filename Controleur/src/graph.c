@@ -178,7 +178,7 @@ node* graph__get_random_connected_neighbour(struct graph* g, node* node){
     }
     int neighbour_pos = rand() % degree;
     Agnode_t *connected_neighbour = NULL;
-    for (Agedge_t *e = agfstedge(g->agraph, node); e; e = agnxtedge(g->agraph, e, node)){
+    for (Agedge_t *e = agfstout(g->agraph, node); e; e = agnxtout(g->agraph, e)){
         Agnode_t *current_neighbour = agtail(e);
         if (graph__node_is_connected(g,current_neighbour)){
             connected_neighbour = current_neighbour;
