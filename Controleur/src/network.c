@@ -80,66 +80,66 @@ void network__close(void){
 void* network__wait(void* parameter){
   struct thread_parameter *param = (struct thread_parameter*) parameter;
   
+  while(1){
+    int client_sock = accept(param->sock, NULL, NULL);
+    if(client_sock == INVALID_SOCKET){
+      perror("accept()");
+      exit(errno);
+    }
 
-  //printf("sock : %d  (%s)\n",sock, (sock == INVALID_SOCKET) ? "not ok" : "ok");
-
-  int client_sock = accept(param->sock, NULL, NULL);
-  if(client_sock == INVALID_SOCKET){
-    perror("accept()");
-    exit(errno);
-  }
-
-  struct display display;
-  display.get_fish_continously = 0;
-  display.log_out = 0;
-  display.buffer = NULL;
-  display.node = NULL;
-
-  // buffer contenant les messages échangés
-  char buffer[BUFFER_SIZE + 1]; 
-  int used_buffer = 0;//number of char used in buffer
+    struct display display;
+    display.get_fish_continously = 0;
+    display.log_out = 0;
+    display.buffer = NULL;
+    display.node = NULL;
+    
+    // buffer contenant les messages échangés
+    char buffer[BUFFER_SIZE + 1]; 
+    int used_buffer = 0;//number of char used in buffer
   
-  // Initialisation des timers
-  struct timeval get_fish_timer;
-  gettimeofday(&get_fish_timer, NULL);
-  struct timeval last_interaction_timer;
-  last_interaction_timer = get_fish_timer;
+    // Initialisation des timers
+    struct timeval get_fish_timer;
+    gettimeofday(&get_fish_timer, NULL);
+    struct timeval last_interaction_timer;
+    last_interaction_timer = get_fish_timer;
 
-  while (!display.log_out){
+ 
+    while (!display.log_out){
 
+      // reçoit des morceaux de message client
       int length = recv(client_sock, buffer+used_buffer, BUFFER_SIZE - used_buffer, MSG_DONTWAIT);
 
       if (length >= 0){
-	  // reset timer log out
-          gettimeofday(&last_interaction_timer,NULL);
+	// reset timer log out
+	gettimeofday(&last_interaction_timer,NULL);
     	  
-          buffer[length+used_buffer] = '\0';
+	buffer[length+used_buffer] = '\0';
           
-	  for (char* current = buffer+used_buffer; *current != '\0'; current ++){
-              if (*current == '\r'){
-                  printf("enfer et damnation ! il y a un \\r ! on est sous linux pourtant!\npour éviter ce problème on utilise une solution instable (cf %s ligne %d)\n", __FILE__, __LINE__);
-                  *current = '\0';
-              }
+	for (char* current = buffer+used_buffer; *current != '\0'; current ++){
+	  // fix si jamais il y a un \r
+	  if (*current == '\r'){
+	    *current = '\0';
+	  }
 
-              if (*current == '\n'){
-                  *current = '\0';
-                  char * result = interface__compute_display_input(param->aquarium, &display, buffer);
-                  write(client_sock, result, strlen(result));
-                  free(result);
+	  if (*current == '\n'){
+	    *current = '\0';
+	    char * result = interface__compute_display_input(param->aquarium, &display, buffer);
+	    write(client_sock, result, strlen(result));
+	    free(result);
 
-                  //then copy the chars after the \n to the start of buffer
-                  used_buffer = 0;
-                  length = 0;
-                  for (current ++; *current !='\0';current ++){
-                      buffer[used_buffer] = *current;
-                      used_buffer ++;
-                  }
-                  buffer[used_buffer] = '\0';
-                  break;
-              }
-          }
+	    //copie le caractère après le \n au debut du buffer
+	    used_buffer = 0;
+	    length = 0;
+	    for (current ++; *current !='\0';current ++){
+	      buffer[used_buffer] = *current;
+	      used_buffer ++;
+	    }
+	    buffer[used_buffer] = '\0';
+	    break;
+	  }
+	}
 
-          used_buffer += length;
+	used_buffer += length;
       }
 
       usleep(100);
@@ -149,15 +149,17 @@ void* network__wait(void* parameter){
       }
 
       network__timer_log_out(&last_interaction_timer, client_sock, &display);
-  }
+    }
 
 
-  // retire le client du graphe
-  if (display.node)
+    // retire le client du graphe
+    if (display.node)
       graph__node_disconnect(param->aquarium->graph, display.node);
 
-  // ferme le socket
-  close(client_sock);
+    // ferme le socket
+    close(client_sock);
+  }
+
   return NULL;
 }
 
