@@ -172,15 +172,18 @@ char* graph__get_node_name(struct graph* g, node* node){
 }
 
 node* graph__get_random_connected_neighbour(struct graph* g, node* node){
-    int degree = agdegree(g->agraph, node, 0, 1);
+    int degree = agdegree(g->agraph, node, 1, 1);
     if (!degree){
       printf("degree = 0");
         return NULL;
     }
     int neighbour_pos = rand() % degree;
     Agnode_t *connected_neighbour = NULL;
-    for (Agedge_t *e = agfstout(g->agraph, node); e; e = agnxtout(g->agraph, e)){
-        Agnode_t *current_neighbour = agtail(e);
+    for (Agedge_t *e = agfstedge(g->agraph, node); e; e = agnxtedge(g->agraph, e, node)){
+        Agnode_t *current_neighbour = aghead(e);
+        if (current_neighbour == node){
+            current_neighbour = agtail(e);
+        }
         if (graph__node_is_connected(g,current_neighbour)){
             connected_neighbour = current_neighbour;
         }
