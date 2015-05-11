@@ -14,6 +14,12 @@ int main(int argc, char** argv)
 
   struct aquarium aquarium;
   fish__init_aquarium(&aquarium);
+
+  char *default_graph = "data/default.dot";
+  if (argc > 1){
+      default_graph = argv[1];
+  }
+  graph__load(default_graph, &aquarium.graph);
  
   interface__wait_user_input(&aquarium);
 

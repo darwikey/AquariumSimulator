@@ -28,6 +28,12 @@ void graph__node_disconnect(struct graph *g, node* node);
  * @return null if all nodes are already connected
  */
 node* graph__get_not_connected_node(struct graph*g,char *prefered_name);
+/**
+ * get a random node in the graph with a client connected.
+ * @param node the returned node have an edge with this node
+ * @return NULL if there is no node connected to a client and to the actual node.
+ */
+node* graph__get_random_connected_neighbour(struct graph* g, node* node);
 char* graph__get_node_name(struct graph*g, node* node);
 
 
