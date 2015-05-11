@@ -7,6 +7,7 @@
 
 struct graph{
     Agraph_t *agraph;
+    Agsym_t *connect_attribute;
 };
 
 
@@ -32,6 +33,7 @@ int graph__load(char* path, struct graph **g){
         return 1;
     }
     fclose(f);
+    (*g)->connect_attribute = agattr((*g)->agraph, AGNODE, "connected", "false");
     printf("\t-> %s loaded (%d display view)!\n",agnameof((*g)->agraph),agnnodes((*g)->agraph));
     return 0;
 }
@@ -129,32 +131,33 @@ void graph__free(struct graph**g){
 }
 
 
+static int graph__node_is_connected(struct graph*g, Agnode_t* node){
+    return strcmp(agxget(node,g->connect_attribute),"false");
+}
+
 void graph__node_connect(struct graph* g, node* node){
     assert(node != NULL);
-    agset(node,"connected","true");//TODO this do not work
-    //printf("connected : %s\n",agget(node,"connected"));
+    assert(!graph__node_is_connected(g,node));
+    agxset(node, g->connect_attribute ,"true");
 }
 
 void graph__node_disconnect(struct graph* g, node* node){
     assert(node != NULL);
-    agset(node,"connected",NULL);
-}
-
-static int graph__node_is_connected(Agnode_t* node){
-return agget(node,"connected") != NULL;
+    assert(graph__node_is_connected(g,node));
+    agxset(node, g->connect_attribute, "false");
 }
 
 node* graph__get_not_connected_node(struct graph*g, char* prefered_name){
     Agnode_t* node = NULL;
     if (prefered_name){
         for (Agnode_t *n = agfstnode(g->agraph); n; n = agnxtnode(g->agraph,n)){
-            if (!strcmp(agget(n,"label"),prefered_name) && !graph__node_is_connected(n))
+            if (!strcmp(agget(n,"label"),prefered_name) && !graph__node_is_connected(g,n))
                 node = n;
         }
     }
     if (node == NULL){
         for (Agnode_t *n = agfstnode(g->agraph); n; n = agnxtnode(g->agraph,n)){
-            if (!graph__node_is_connected(n))
+            if (!graph__node_is_connected(g,n))
                 node = n;
         }
     }
