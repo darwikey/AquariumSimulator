@@ -22,6 +22,8 @@ struct fish* fish__create_fish(char* name){
   f->delay = rand() % 5 + 1;
   f->is_started = 0;
 
+  f->node = NULL;
+
   return f;
 }
 
@@ -34,6 +36,7 @@ void fish__init_aquarium(struct aquarium* a){
 
 
 void fish__add_fish(struct aquarium* a, struct fish* f){
+
   a->fish_number++;
 
   if (a->fishs == NULL){
@@ -96,7 +99,7 @@ void fish__status(struct aquarium* a, char* buffer, int buffer_length){
 }
 
 
-void fish__getFishes(struct aquarium* a, char* buffer, int buffer_length){
+void fish__get_fishes(struct aquarium* a, node* graphe_node, char* buffer, int buffer_length){
 
   int n = snprintf(buffer, buffer_length, "list");
   buffer += n;
@@ -104,6 +107,12 @@ void fish__getFishes(struct aquarium* a, char* buffer, int buffer_length){
 
   for (int i = 0; i < a->fish_number; i++){
     struct fish* f = a->fishs[i];
+
+    // on ne renvoie que les poissons appartenants au node affecté au client
+    if (f->node != graphe_node){
+      continue;
+    }
+
     int n = snprintf(buffer, buffer_length, " [%s at %dx%d,%dx%d,%d]", f->name, f->target_x, f->target_y, f->size_x, f->size_y, f->delay);
 
     if (n > 0 && n < buffer_length){

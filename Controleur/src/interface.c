@@ -153,54 +153,76 @@ char* parse_display_msg(char** arguments, struct aquarium *aquarium, struct disp
 
   else if (strcmp(arguments[0], "addFish") == 0) 
     {
-      if (arguments[1] && arguments[2] && arguments[3] && arguments[4] && arguments[5]){
-	struct fish* fish = fish__create_fish(str_copy(arguments[1]));
-	parse_coord(arguments[3], &fish->target_x, &fish->target_y);
-	parse_coord(arguments[4], &fish->size_x, &fish->size_y);
-	//TODO modele de mobilité
-	fish__add_fish(aquarium, fish);
-
-	snprintf(buffer,BUFFER_SIZE,"OK\n");
+      if (display->node == NULL){
+	snprintf(buffer,BUFFER_SIZE,"NOK : vous n'etes pas connecté.\n");
       }
       else{
-	snprintf(buffer,BUFFER_SIZE,"NOK : nécessite 5 arguments\n");
+	if (arguments[1] && arguments[2] && arguments[3] && arguments[4] && arguments[5]){
+	  struct fish* fish = fish__create_fish(str_copy(arguments[1]));
+	  parse_coord(arguments[3], &fish->target_x, &fish->target_y);
+	  parse_coord(arguments[4], &fish->size_x, &fish->size_y);
+	  fish->node = display->node;
+	  
+	  //TODO modele de mobilité
+	  fish__add_fish(aquarium, fish);
+	  
+	  snprintf(buffer,BUFFER_SIZE,"OK\n");
+	}
+	else{
+	  snprintf(buffer,BUFFER_SIZE,"NOK : nécessite 5 arguments\n");
+	}
       }
     }
 
   else if (strcmp(arguments[0], "delFish") == 0)
     {
-      if (arguments[1]){
-	if (fish__remove_fish(aquarium, arguments[1])){
-	  snprintf(buffer,BUFFER_SIZE,"OK\n");
-	}
-	else{
-	  snprintf(buffer,BUFFER_SIZE,"NOK : poisson inexistant\n");
-	}
+      if (display->node == NULL){
+	snprintf(buffer,BUFFER_SIZE,"NOK : vous n'etes pas connecté.\n");
       }
       else{
-	snprintf(buffer,BUFFER_SIZE,"NOK : manque un argument\n");
+	if (arguments[1]){
+	  if (fish__remove_fish(aquarium, arguments[1])){
+	    snprintf(buffer,BUFFER_SIZE,"OK\n");
+	  }
+	  else{
+	    snprintf(buffer,BUFFER_SIZE,"NOK : poisson inexistant\n");
+	  }
+	}
+	else{
+	  snprintf(buffer,BUFFER_SIZE,"NOK : manque un argument\n");
+	}
       }
     }
 
   else if (strcmp(arguments[0], "startFish") == 0)
     {
-      if (arguments[1]){
-	if (fish__start_fish(aquarium, arguments[1])){
-	  snprintf(buffer,BUFFER_SIZE,"OK\n");
-	}
-	else{
-	  snprintf(buffer,BUFFER_SIZE,"NOK : poisson inexistant\n");
-	}
+      if (display->node == NULL){
+	snprintf(buffer,BUFFER_SIZE,"NOK : vous n'etes pas connecté.\n");
       }
       else{
-	snprintf(buffer,BUFFER_SIZE,"NOK : manque un argument\n");
+	if (arguments[1]){
+	  if (fish__start_fish(aquarium, arguments[1])){
+	    snprintf(buffer,BUFFER_SIZE,"OK\n");
+	  }
+	  else{
+	    snprintf(buffer,BUFFER_SIZE,"NOK : poisson inexistant\n");
+	  }
+	}
+	else{
+	  snprintf(buffer,BUFFER_SIZE,"NOK : manque un argument\n");
+	}
       }
     }
 
   else if (strcmp(arguments[0], "getFishesContinuously") == 0)
     {
-      display->get_fish_continously = 1;
-      snprintf(buffer, BUFFER_SIZE, "OK\n");
+      if (display->node == NULL){
+	snprintf(buffer,BUFFER_SIZE,"NOK : vous n'etes pas connecté.\n");
+      }
+      else{
+	display->get_fish_continously = 1;
+	snprintf(buffer, BUFFER_SIZE, "OK\n");
+      }
     }
 
   else if (strcmp(arguments[0], "log") == 0 &&
