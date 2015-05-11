@@ -9,6 +9,7 @@
 #define LISTEN_MAX 5
 #define THREAD_NB 16
 #define LOG_OUT_DELAY 15
+#define GET_FISH_INTERVAL 1
 
 struct thread_parameter{
   struct aquarium* aquarium;
@@ -22,6 +23,8 @@ static struct thread_parameter param;
 
 // fonctions internes
 void* network__wait(void* parameter);
+void network__timer_get_fish(struct timeval* timer, int client_sock, struct aquarium* aquarium);
+void network__timer_log_out(struct timeval* timer, int client_sock, struct display* display);
 
 
 //lance les threads attendant un client
@@ -92,9 +95,11 @@ void* network__wait(void* parameter){
   display.buffer = NULL;
   display.node = NULL;
 
-  char buffer[BUFFER_SIZE + 1]; // +1 so we can add null terminator  
+  // buffer contenant les messages échangés
+  char buffer[BUFFER_SIZE + 1]; 
   int used_buffer = 0;//number of char used in buffer
   
+  // Initialisation des timers
   struct timeval get_fish_timer;
   gettimeofday(&get_fish_timer, NULL);
   struct timeval last_interaction_timer;
@@ -102,21 +107,12 @@ void* network__wait(void* parameter){
 
   while (!display.log_out){
 
-    struct timeval timer;
-    gettimeofday(&timer, NULL);
-    if (display.get_fish_continously && timer.tv_sec > get_fish_timer.tv_sec + 1){
-      // reset du timer
-      gettimeofday(&get_fish_timer, NULL);
-      char tmp[BUFFER_SIZE];
-      fish__getFishes(param->aquarium, tmp, BUFFER_SIZE);
-      write(client_sock, tmp, strlen(tmp));
-    }
-
       int length = recv(client_sock, buffer+used_buffer, BUFFER_SIZE - used_buffer, MSG_DONTWAIT);
 
       if (length >= 0){
+	  // reset timer log out
           gettimeofday(&last_interaction_timer,NULL);
-    	  // We have to null terminate the received data ourselves
+    	  
           buffer[length+used_buffer] = '\0';
           
 	  for (char* current = buffer+used_buffer; *current != '\0'; current ++){
@@ -128,7 +124,7 @@ void* network__wait(void* parameter){
               if (*current == '\n'){
                   *current = '\0';
                   char * result = interface__compute_display_input(param->aquarium, &display, buffer);
-                  write(client_sock, result, strlen(result));//TODO check for errors
+                  write(client_sock, result, strlen(result));
                   free(result);
 
                   //then copy the chars after the \n to the start of buffer
@@ -145,15 +141,52 @@ void* network__wait(void* parameter){
 
           used_buffer += length;
       }
-      usleep(100);//to be removed
-      if (timer.tv_sec > last_interaction_timer.tv_sec+LOG_OUT_DELAY){
-        display.log_out = 1;
-        snprintf(buffer,BUFFER_SIZE,"pas d'interaction depuis %d secondes. La connexion va être intérompue.\nLa prochaine fois utilisez la commande ping\n",LOG_OUT_DELAY);
-        write(client_sock, buffer, strlen(buffer));//TODO check for errors
+
+      usleep(100);
+
+      if (display.get_fish_continously){
+	network__timer_get_fish(&get_fish_timer, client_sock, param->aquarium);
       }
+
+      network__timer_log_out(&last_interaction_timer, client_sock, &display);
   }
+
+
+  // retire le client du graphe
   if (display.node)
       graph__node_disconnect(param->aquarium->graph, display.node);
+
+  // ferme le socket
   close(client_sock);
   return NULL;
+}
+
+
+void network__timer_get_fish(struct timeval* timer, int client_sock, struct aquarium* aquarium){
+  struct timeval current_time;
+  gettimeofday(&current_time, NULL);
+
+  if (current_time.tv_sec > timer->tv_sec + GET_FISH_INTERVAL){
+    // reset du timer
+    gettimeofday(timer, NULL);
+
+    // envoie de la liste de poissons
+    char tmp[BUFFER_SIZE];
+    fish__getFishes(aquarium, tmp, BUFFER_SIZE);
+    write(client_sock, tmp, strlen(tmp));
+  }
+}
+
+
+void network__timer_log_out(struct timeval* timer, int client_sock, struct display* display){
+  struct timeval current_time;
+  gettimeofday(&current_time, NULL);
+
+  if (current_time.tv_sec > timer->tv_sec+LOG_OUT_DELAY){
+    display->log_out = 1;
+
+    char tmp[BUFFER_SIZE];
+    snprintf(tmp, BUFFER_SIZE, "pas d'interaction depuis %d secondes. La connexion va être interrompue.\nLa prochaine fois utilisez la commande ping\n",LOG_OUT_DELAY);
+    write(client_sock, tmp, strlen(tmp));
+  }
 }
