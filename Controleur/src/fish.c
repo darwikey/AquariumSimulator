@@ -143,8 +143,21 @@ void fish__update(struct aquarium* a){
       a->fishs[i]->delay--;
 
       if (a->fishs[i]->delay <= 0){
-	 a->fishs[i]->target_x = rand() % 100;
-	 a->fishs[i]->target_y = rand() % 100;
+
+	// si sa destination est en dehors de l'ecran, on le change de node
+	if (a->fishs[i]->target_x < 0 || a->fishs[i]->target_x > 100 || a->fishs[i]->target_y < 0 || a->fishs[i]->target_y > 100){
+	  if (a->graph != NULL && a->fishs[i]->node != NULL){
+	    node* next_node = graph__get_random_connected_neighbour(a->graph, a->fishs[i]->node);
+	    printf("node : %p,  next node : %p\n", a->fishs[i]->node, next_node);
+
+	    if (next_node != NULL){
+	      a->fishs[i]->node = next_node;
+	    }
+	  }
+	}
+
+	 a->fishs[i]->target_x = rand() % 200;
+	 a->fishs[i]->target_y = rand() % 200;
 
 	 a->fishs[i]->delay = rand() % 5 + 3;
       }

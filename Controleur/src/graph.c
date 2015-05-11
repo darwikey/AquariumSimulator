@@ -174,6 +174,7 @@ char* graph__get_node_name(struct graph* g, node* node){
 node* graph__get_random_connected_neighbour(struct graph* g, node* node){
     int degree = agdegree(g->agraph, node, 0, 1);
     if (!degree){
+      printf("degree = 0");
         return NULL;
     }
     int neighbour_pos = rand() % degree;
