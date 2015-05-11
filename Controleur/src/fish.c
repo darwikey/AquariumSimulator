@@ -156,8 +156,8 @@ void fish__update(struct aquarium* a){
 	  }
 	}
 
-	 a->fishs[i]->target_x = rand() % 200;
-	 a->fishs[i]->target_y = rand() % 200;
+	a->fishs[i]->target_x = (rand() % 150) - 25;
+	a->fishs[i]->target_y = (rand() % 150) - 25;
 
 	 a->fishs[i]->delay = rand() % 5 + 3;
       }
