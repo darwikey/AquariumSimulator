@@ -25,25 +25,19 @@ public class Connexion implements Runnable {
     public Connexion(Socket s, ReadCfg rc, Window w){
     	this.w = w;
     	socket = s;
-    	this.rc = rc;
-	
-    	//System.out.println("constructor");
+    	this.rc = rc;    	
     }
     
     public void run() {
 	String consoleOutput;
 	Parser p = new Parser();
-
-	//System.out.println("je rentre dans run");
-	try {
-	    
-	    //System.out.println("je rentre dans le try");
+	try {   
 	    
 	    out = new PrintWriter(socket.getOutputStream());
 	    in = new BufferedReader(new InputStreamReader(socket.getInputStream()));	
 	    
-	    //System.out.println("je suis iciiiiiiiii v");
 	    out.println("getFishesContinuously");
+	    out.flush();
 	    Thread t1 = new Thread(new SendPing(rc.getControllerPort(), out));
 	    Thread t2 = new Thread(new ReadInput(w, in, rc.getControllerPort()));
 	    Thread t3 = new Thread(new ReadAndSendConsoleOutput(out));
@@ -51,61 +45,7 @@ public class Connexion implements Runnable {
 	    t2.start();
 	    t3.start();
 	}
-	/*if (rc.getId().equals(""))
-	  out.println("hello");
-	  else{
-	  out.println("hello in as "+rc.getId());
-	  }
-	    
-	  out.flush();*/
-	//String stock;
-	/* = in.readLine();
-	   System.out.println(stock);	
-
-	   if (stock.compareTo("no greeting") == 0){
-	   System.out.println("The program will stop because of: "+stock);	
-		
-	   }	    
-	   else{
-	   System.out.println(stock);
-	   idClient = p.parseGreeting(stock);
-	   }*/
-
-	//out.println("getFishesContinuously");
-	//out.println("ping 12345");
-	//out.flush();
-	//stock = in.readLine();
-		
-
-	//System.out.println(stock);
-	//listFishString = in.readLine();
-	//System.out.println(listFishString);
-	//LinkedList <Fish> listFishes = p.parseFishList(listFishString);  
-	    
-	    
-	    
-	//System.out.println("1 "+listFishes.size());
-	//w.initListFish(listFishes);
-	    
-	/*	    int i = 1;
-		    while (true){
-		    consoleOutput = sc.nextLine();
-		    out.println(consoleOutput);
-		    out.flush();
-		    System.out.println(consoleOutput);
-		    i++;
-		    listFishString = in.readLine();
-		    System.out.println(listFishString);
-		    try {
-		    // thread to sleep for 1000 milliseconds
-		    Thread.sleep(1000);
-		    } catch (Exception e) {
-		    System.out.println(e);
-		    }
-		    /*listFishes = p.parseFishList(listFishString); 
-		    System.out.println(i+" "+listFishes.size());
-		    w.updateFishList(listFishes);
-		    }*/
+	
 
 	    
 	catch (UnknownHostException e) {

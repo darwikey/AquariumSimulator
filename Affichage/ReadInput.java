@@ -12,6 +12,7 @@ public class ReadInput implements Runnable{
     private BufferedReader in = null; 
     private int port;
     private Window window;
+    private LinkedList <Fish> listFishes;
 
     public ReadInput(Window w, BufferedReader in, int p){
     	window = w;
@@ -23,7 +24,7 @@ public class ReadInput implements Runnable{
     public void run() {
     	String listFishString;
     	String stock;
-    	LinkedList <Fish> listFishes;
+    	
     	Parser p = new Parser ();
     	
     	
@@ -31,12 +32,11 @@ public class ReadInput implements Runnable{
 	  	       		   	
 	    while (true){
 	
-		stock = in.readLine();
-		//System.out.println(stock);
+		stock = in.readLine();	
 		if (stock.startsWith("pong"))
 		    {
 			//System.out.println("pong " +port);
-		    } else if (stock.startsWith("list")){
+		    } else if (stock.startsWith("list")){		   
 		    listFishString = stock;
 		    listFishes = p.parseFishList(listFishString); 
 		    LinkedList<Juhnytg> positions = new LinkedList<Juhnytg>();
@@ -46,13 +46,16 @@ public class ReadInput implements Runnable{
 		    p.fillPositionsList(positions);
 		    window.updateFishList(listFishes);
 		}
+
+
+	
 	    }
-    	}
+	}
 	      		
 	catch (IOException e) {
 
-    	    System.err.println("No server listening port "+socket.getLocalPort());
-    	}
+	    System.err.println("No server listening port "+socket.getLocalPort());
+	}
     	
 	
     }

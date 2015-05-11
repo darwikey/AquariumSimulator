@@ -55,12 +55,12 @@ public class Window extends JFrame {
     
     }
     
-    private void repaintFish (){
-    	Fish f;
-    	for (int i =0; i < listFishes.size(); i++){
-	    f = listFishes.get(i);
-	    if (f.getHasArrived() == false){   			
-		listFishes.get(i).move(refreshRate);
+    private void repaintFish (LinkedList<String> listStarted){
+	for (int j = 0; j < listStarted.size(); j++){
+	    for (int i =0; i < listFishes.size(); i++){
+		if(listStarted.get(j).equals(listFishes.get(i).getFishType())){		  		
+		    listFishes.get(i).move(refreshRate);
+		}
 	    }
 	}
     }
@@ -69,11 +69,13 @@ public class Window extends JFrame {
     
     public void autoRepaint (){
     	while (true){	
-		
-	    repaintFish();    
-	    pan.repaint();
-	    textField.repaint();
 	    
+
+	    if (!ReadAndSendConsoleOutput.getListStarted().isEmpty()){
+		repaintFish(ReadAndSendConsoleOutput.getListStarted());    
+		pan.repaint();
+		textField.repaint();
+	    }
 	    try {
 		Thread.sleep(refreshRate);
 	    } catch (InterruptedException e) {
