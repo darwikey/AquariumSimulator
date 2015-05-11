@@ -1,18 +1,21 @@
+import java.util.Scanner; 
+import java.io.PrintWriter;
+
 public class ReadAndSendConsoleOutput implements Runnable{
 
     private Scanner sc;
-    private PrintWriter pw
+    private PrintWriter out;
     
-	public ReadAndSendConsoleOutput(PrintWriter pw){
+	public ReadAndSendConsoleOutput(PrintWriter out){
 	sc = new Scanner(System.in);
-	pw = pw;
+	out = out;
     }
 
     public void run(){
 	while(true){
+	    //System.out.println("on vient d'écrire : " + sc.nextLine());
 	    out.println(sc.nextLine());
 	    out.flush();
 	}
     }
-
 }

@@ -27,28 +27,29 @@ public class Connexion implements Runnable {
     	socket = s;
     	this.rc = rc;
 	
-    	System.out.println("constructor");
+    	//System.out.println("constructor");
     }
     
     public void run() {
 	String consoleOutput;
 	Parser p = new Parser();
 
-	System.out.println("je rentre dans run");
+	//System.out.println("je rentre dans run");
 	try {
 	    
-	    System.out.println("je rentre dans le try");
+	    //System.out.println("je rentre dans le try");
 	    
 	    out = new PrintWriter(socket.getOutputStream());
 	    in = new BufferedReader(new InputStreamReader(socket.getInputStream()));	
 	    
-	    System.out.println("je suis iciiiiiiiii v");
+	    //System.out.println("je suis iciiiiiiiii v");
 	    out.println("getFishesContinuously");
 	    Thread t1 = new Thread(new SendPing(rc.getControllerPort(), out));
 	    Thread t2 = new Thread(new ReadInput(w, in, rc.getControllerPort()));
-	    Thread t3 = new Thread(new ReadAndSendConsoleOutput(pw));
+	    Thread t3 = new Thread(new ReadAndSendConsoleOutput(out));
 	    t1.start();
 	    t2.start();
+	    t3.start();
 	}
 	/*if (rc.getId().equals(""))
 	  out.println("hello");
