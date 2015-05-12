@@ -31,6 +31,7 @@ public class ReadInput implements Runnable{
 	    while (true){
 		stock = in.readLine();	
 		if (stock.startsWith("list")){
+
 		    listFishString = stock;
 		    listFishes = p.parseFishList(listFishString); 
 		    HashMap <String,Point> nameAndPoint = new HashMap <String,Point>();

@@ -18,7 +18,7 @@
 #define SOCKET_ERROR -1
 
 
-void network__launch(uint16_t port_number, struct aquarium* aquarium);
+void network__launch(struct aquarium* aquarium);
 
 void network__close(void);
 
