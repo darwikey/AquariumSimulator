@@ -58,7 +58,7 @@ public class Window extends JFrame {
     public void autoRepaint (){
     	while (true){	
 	    listStarted = ReadAndSendConsoleOutput.getListStarted();
-
+	    System.out.println("listStarted " + listStarted);
 	    if (ReadAndSendConsoleOutput.isActivated){
 	    	repaintFish(listStarted);    
 	    	pan.repaint();

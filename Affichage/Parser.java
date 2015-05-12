@@ -14,15 +14,6 @@ public class Parser {
 	fishPositions = new LinkedList<Juhnytg> ();
 
     }
-
-
-    public String readInput(){
-	String str = new String();
-	//sc = new Scanner(System.in);
-	str = sc.nextLine();
-	return str;
-
-    }   
     
 
     public LinkedList<Fish> parseFishList(String str){
@@ -60,7 +51,11 @@ public class Parser {
 		
 	    case 0:
 		speed = Integer.parseInt(parts[j]);
-		if (fishPositions.size() == 0){
+		
+		// fishposition contains the former position and the fishType of all previous fishses
+		// start a new fish at 0,0
+		// keep going with a previous fish with its former position
+		if (fishPositions.size() == 0){  
 		    System.out.println("coucou");
 		    
 		    fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y, speed, new Point(0,0)));
@@ -69,16 +64,19 @@ public class Parser {
 		else {
 		    System.out.println("PAS COUCOU");
 		    boolean found = false;
-		    for (int i = 0 ; i < fishPositions.size() ; i++){
+		    //System.out.println("position : " + fishPositions.get(0).getPos());
+		    for (int i = 0 ; i < fishPositions.size() ; i++){			
 			if (fishType.equals(fishPositions.get(i).getFishType())){
 			    fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y, speed, fishPositions.get(i).getPos()));
 			    fishPositions.remove(i);
 			    found = true;
-			    break;
+			    //break;
 			}
 		    }
 
 		    if (!found){
+			fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y, speed, new Point(0,0)));
+			System.out.println("not found");
 		        
 		    }
 		    

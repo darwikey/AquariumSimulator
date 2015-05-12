@@ -4,8 +4,8 @@ public class Juhnytg {
     private String fishType;
 
     public Juhnytg (String fishType, Point pos){
-	pos = pos;
-	fishType = fishType;
+	this.pos = pos;
+	this.fishType = fishType;
     }
 
     public Point getPos(){

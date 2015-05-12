@@ -28,13 +28,16 @@ public class ReadInput implements Runnable{
     	try {	  	       		   	
     		while (true){
     			stock = in.readLine();	
+			System.out.println("on recoit : " + stock);
     			 if (stock.startsWith("list")){		   
     				 listFishString = stock;
     				 listFishes = p.parseFishList(listFishString); 
     				 LinkedList<Juhnytg> positions = new LinkedList<Juhnytg>();
     				 for (int i = 0 ; i < listFishes.size() ; i++){
-    					 positions.add(new Juhnytg(listFishes.get(i).getFishType(), listFishes.get(i).getCoord()));
+    					 positions.addFirst(new Juhnytg(listFishes.get(i).getFishType(), listFishes.get(i).getCoord()));
+					 //System.out.println("coord : " + listFishes.get(i).getCoord());
     				 }
+				 System.out.println("positions : " + positions.get(0).getPos().x + " " + positions.get(0).getPos().y);
     				 p.fillPositionsList(positions);
     				 window.updateFishList(listFishes);
     			 } else if (stock.startsWith("OK")){
@@ -56,6 +59,7 @@ public class ReadInput implements Runnable{
     				 System.out.println(stock);
     			 } else if (stock.startsWith("bye")){
     				 socket.close();
+				 exit();
     			 } 
     		}
     	}
