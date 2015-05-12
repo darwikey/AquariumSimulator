@@ -37,7 +37,7 @@ public class ReadInput implements Runnable{
     					 positions.addFirst(new Juhnytg(listFishes.get(i).getFishType(), listFishes.get(i).getCoord()));
 					 //System.out.println("coord : " + listFishes.get(i).getCoord());
     				 }
-				 System.out.println("positions : " + positions.get(0).getPos().x + " " + positions.get(0).getPos().y);
+				 // System.out.println("positions : " + positions.get(0).getPos().x + " " + positions.get(0).getPos().y);
     				 p.fillPositionsList(positions);
     				 window.updateFishList(listFishes);
     			 } else if (stock.startsWith("OK")){
