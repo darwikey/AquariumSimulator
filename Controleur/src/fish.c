@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include "utils.h"
 
 
 struct fish* fish__create_fish(char* name){
@@ -151,7 +152,8 @@ void fish__update(struct aquarium* a){
 	if (a->fishs[i]->target_x < 0 || a->fishs[i]->target_x > 100 || a->fishs[i]->target_y < 0 || a->fishs[i]->target_y > 100){
 	  if (a->graph != NULL && a->fishs[i]->node != NULL){
 	    node* next_node = graph__get_random_connected_neighbour(a->graph, a->fishs[i]->node);
-	    printf("node : %p,  next node : %p\n", a->fishs[i]->node, next_node);
+
+	    log(LOG_INFO, "node : %p,  next node : %p\n", a->fishs[i]->node, next_node);
 
 	    if (next_node != NULL){
 	      a->fishs[i]->node = next_node;
@@ -178,6 +180,8 @@ void fish__update(struct aquarium* a){
 	}
 
 	a->fishs[i]->delay = rand() % 4 + 4;
+	
+	log(LOG_INFO, "nouvelle destination pour %s : %dx%d, (en %d seconde)", a->fishs[i]->name, a->fishs[i]->target_x, a->fishs[i]->target_y, a->fishs[i]->delay);
       }
     }
 

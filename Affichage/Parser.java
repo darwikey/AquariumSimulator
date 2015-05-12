@@ -56,13 +56,13 @@ public class Parser {
 		// start a new fish at 0,0
 		// keep going with a previous fish with its former position
 		if (fishPositions.size() == 0){  
-		    System.out.println("coucou");
+		    //System.out.println("coucou");
 		    
 		    fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y, speed, new Point(0,0)));
 		}
 
 		else {
-		    System.out.println("PAS COUCOU");
+		    //System.out.println("PAS COUCOU");
 		    boolean found = false;
 		    //System.out.println("position : " + fishPositions.get(0).getPos());
 		    for (int i = 0 ; i < fishPositions.size() ; i++){			
