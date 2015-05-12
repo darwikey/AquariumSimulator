@@ -8,11 +8,12 @@ static enum log_level set_level = LOG_ALL;
 static FILE* log_file = NULL;
 
 void log_init(){
-    log_file = fopen("Contrôleur.log","a");
+    log_file = fopen("Controleur.log","w");
 }
 
 void _log(enum log_level level, const char *fmt, ...) {
     va_list arg;
+    
     //FILE *log_file = (level == LOG_ERROR) ? err_log : info_log;
 
     /* Check if the message should be logged */
@@ -30,6 +31,7 @@ void _log(enum log_level level, const char *fmt, ...) {
     vfprintf(log_file, fmt, arg);
     va_end(arg);
 
+    fflush(log_file);
 }
 
 void set_log_level(enum log_level level){
