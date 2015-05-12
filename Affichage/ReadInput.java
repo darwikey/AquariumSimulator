@@ -26,51 +26,55 @@ public class ReadInput implements Runnable{
     	String command;
     	
     	try {	  	       		   	
-    		while (true){
-    			stock = in.readLine();	
-			//System.out.println("on recoit : " + stock);
-    			 if (stock.startsWith("list")){
-			     System.out.println("on recoit : " + stock);
-    				 listFishString = stock;
-    				 listFishes = p.parseFishList(listFishString); 
-    				 LinkedList<Juhnytg> positions = new LinkedList<Juhnytg>();
-    				 for (int i = 0 ; i < listFishes.size() ; i++){
-    					 positions.addFirst(new Juhnytg(listFishes.get(i).getFishType(), listFishes.get(i).getCoord()));
-					 //System.out.println("coord : " + listFishes.get(i).getCoord());
-    				 }
+	    while (true){
+		stock = in.readLine();	
+		//System.out.println("on recoit : " + stock);
+		if (stock.startsWith("list")){
+		    //System.out.println("on recoit : " + stock);
+		    listFishString = stock;
+		    listFishes = p.parseFishList(listFishString); 
+		    LinkedList<Juhnytg> positions = new LinkedList<Juhnytg>();
+		    for (int i = 0 ; i < listFishes.size() ; i++){
+			positions.addFirst(new Juhnytg(listFishes.get(i).getFishType(), listFishes.get(i).getCoord()));
+			//System.out.println("coord : " + listFishes.get(i).getCoord());
+		    }
 
-    				 p.fillPositionsList(positions);
-    				 window.updateFishList(listFishes);
-    			 } else if (stock.startsWith("OK")){
-			     System.out.println("->"+stock);
-    				 listCommands = ReadAndSendConsoleOutput.getListCommands();
-    				 command = listCommands.getFirst();
-    				 //if (command.startsWith("startFish")){
-				 //String[] parts = command.split(" ");
-    					 //ReadAndSendConsoleOutput.getListStarted().add(parts[1]);	
-    					 //ReadAndSendConsoleOutput.isActivated = true;
-    				 //} else {
-				 //System.out.println(stock);
-					 //}
-    				 listCommands.removeFirst();
+		    p.fillPositionsList(positions);
+		    window.updateFishList(listFishes);
+		} else if (stock.startsWith("OK")){
+		    if(Client.displayMessages)
+			System.out.println("->"+stock);
+			     
+		    listCommands = ReadAndSendConsoleOutput.getListCommands();
+		    command = listCommands.getFirst();
+		    //if (command.startsWith("startFish")){
+		    //String[] parts = command.split(" ");
+		    //ReadAndSendConsoleOutput.getListStarted().add(parts[1]);	
+		    //ReadAndSendConsoleOutput.isActivated = true;
+		    //} else {
+		    //System.out.println(stock);
+		    //}
+		    listCommands.removeFirst();
     				 
-    			 } else if (stock.startsWith("NOK")){
-    				 listCommands = ReadAndSendConsoleOutput.getListCommands();
-    				 listCommands.removeFirst();
-    				 System.out.println("->"+stock);
-    			 } else if (stock.startsWith("bye")){
-			     System.out.println("->"+stock);
-    				 socket.close();
-				 System.exit(0);
-    			 } 
+		} else if (stock.startsWith("NOK")){
+		    listCommands = ReadAndSendConsoleOutput.getListCommands();
+		    listCommands.removeFirst();
+		    if(Client.displayMessages)
+			System.out.println("->"+stock);
+		} else if (stock.startsWith("bye")){
+		    if(Client.displayMessages)
+			System.out.println("->"+stock);
+		    socket.close();
+		    System.exit(0);
+		} 		
 
 			
-    		}
-    	}
+	    }
+	}
 	      		
-    	catch (IOException e) {
+	catch (IOException e) {
 	    System.err.println("No server listening port "+socket.getLocalPort());
-    	}   		
+	}   		
     }
         
 }

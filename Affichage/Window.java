@@ -6,7 +6,7 @@ import java.awt.BorderLayout;
 
 @SuppressWarnings("serial")
 public class Window extends JFrame {  
-    private final int refreshRate = 100; // milliseconds
+    private final int refreshRate = 1; // milliseconds
     
     private Panel pan;	
     private LinkedList <Fish> listFishes;  
@@ -63,11 +63,11 @@ public class Window extends JFrame {
 	    	repaintFish();    
 	    	pan.repaint();
 		//}
-	    try {
-		Thread.sleep(refreshRate);
+		try {
+		    Thread.sleep(refreshRate);
 	    } catch (InterruptedException e) {
 		e.printStackTrace();
-	    }
+		}
 		
     	}
 	

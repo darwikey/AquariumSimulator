@@ -22,11 +22,12 @@ public class ReadAndSendConsoleOutput implements Runnable{
     	
     	while(true){
     		stock = sc.nextLine();
-		//System.out.println("stock : " + stock);
+		//stock += "\n";
+		//System.out.println("stock : '" + stock+"'");
     		listCommands.add(stock);
-		for (int i = 0 ; i < listCommands.size() ; i++){
+		/*for (int i = 0 ; i < listCommands.size() ; i++){
 		    System.out.println("élément " + i + " : " + listCommands.get(i));
-		}
+		    }*/
 	
     		out.println(stock);
     		out.flush();
@@ -43,3 +44,4 @@ public class ReadAndSendConsoleOutput implements Runnable{
 
 
 }
+
