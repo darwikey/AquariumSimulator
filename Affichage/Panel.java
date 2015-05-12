@@ -33,6 +33,26 @@ public class Panel extends JPanel {
     public LinkedList <Fish> getListFishes (){
 	return listFish;
     }
+
+    private String pathToFish (LinkedList <String> list, String fishType){
+	String fishPath = "res/";
+	String fishPath2 ="";
+	boolean found = false;
+
+	for(String str: list){
+	    if (fishType.contains(str)){
+		fishPath2 = str;
+		found = true;
+	    }
+	}
+	if (found){
+	    fishPath += fishPath2;
+	    fishPath +=".png";
+	} else {
+	    fishPath += "Base.png";
+	}
+	return fishPath;
+    }
 		
 	    
     public void paintComponent(Graphics g){
@@ -48,20 +68,23 @@ public class Panel extends JPanel {
 	int tailleY = 200;
 
 	String fishPath;
+	boolean found = false;
 
 	try {        	
 	    img = ImageIO.read(new File("res/fond_ecran1.jpg"));
 	    g.drawImage(img, 0, 0, tailleEcranX, tailleEcranY, this);
 	        		
 	    for (int i =0; i < listFish.size(); i++){
-		
-		if (fishEnum.contains(listFish.get(i).getFishType()))
+		  		
+		/*if (fishEnum.contains(listFish.get(i).getFishType()))
 		    fishPath = "res/"+listFish.get(i).getFishType()+".png";
 		else
 		    fishPath = defaultPath;
 			    
+		*/
+		fishPath = pathToFish (fishEnum,listFish.get(i).getFishType());
+		
 		img = ImageIO.read(new File(fishPath));
-		//	System.out.println(listFish);
 		posX = ((int)listFish.get(i).getCoord().x) * tailleEcranX / 100;
 		posY = ((int)listFish.get(i).getCoord().y) * tailleEcranY / 100;
 	        		

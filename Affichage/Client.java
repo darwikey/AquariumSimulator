@@ -5,6 +5,10 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+/*
+Main class: Create connection with the controller and
+*/
+
 
 public class Client {
 
@@ -20,10 +24,10 @@ public class Client {
     	
     	Window w = new Window();
 
-
 	if (args.length == 1 && args[0].equals("-v")){
 	    displayMessages = true;
 	}
+
     	ReadCfg rc = new ReadCfg("Affichage.cfg");
     	rc.read();
 	 
@@ -57,12 +61,13 @@ public class Client {
 		    System.out.println("Nouvel id: "+idClient);
 	    }
 	
-	    //Command line ???
-	    //out.println("getFishesContinuously");
-	    //  out.flush();
-		    
-	    Thread t1 = new Thread(new SendPing(rc.getControllerPort(), out));
+	    //Send pings to the controller
+	    Thread t1 = new Thread(new SendPing(rc.getControllerPort(), out));	
+	    
+	    //Receive and read messages from the controller
 	    Thread t2 = new Thread(new ReadInput(w, in, socket));
+
+	    //Read console output
 	    Thread t3 = new Thread(new ReadAndSendConsoleOutput(out));
 		    
 	    t1.start();
@@ -76,7 +81,8 @@ public class Client {
 	    System.out.println("No server listening port");
 	    System.exit(0);
 	}
-		
+	
+	//Repaint the fishes
 	w.autoRepaint();
 		
     }

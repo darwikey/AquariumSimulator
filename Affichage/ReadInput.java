@@ -2,6 +2,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.LinkedList;
+import java.util.HashMap;
+
 
 
 public class ReadInput implements Runnable{
@@ -28,18 +30,16 @@ public class ReadInput implements Runnable{
     	try {	  	       		   	
 	    while (true){
 		stock = in.readLine();	
-		//System.out.println("on recoit : " + stock);
 		if (stock.startsWith("list")){
-		    //System.out.println("on recoit : " + stock);
+
 		    listFishString = stock;
 		    listFishes = p.parseFishList(listFishString); 
-		    LinkedList<Juhnytg> positions = new LinkedList<Juhnytg>();
-		    for (int i = 0 ; i < listFishes.size() ; i++){
-			positions.addFirst(new Juhnytg(listFishes.get(i).getFishType(), listFishes.get(i).getCoord()));
-			//System.out.println("coord : " + listFishes.get(i).getCoord());
-		    }
+		    HashMap <String,Point> nameAndPoint = new HashMap <String,Point>();
 
-		    p.fillPositionsList(positions);
+		    for (int i = 0 ; i < listFishes.size() ; i++){
+			nameAndPoint.put(listFishes.get(i).getFishType(), listFishes.get(i).getCoord());
+		    }
+		    p.fillPositionsHashMap(nameAndPoint);
 		    window.updateFishList(listFishes);
 		} else if (stock.startsWith("OK")){
 		    if(Client.displayMessages)
@@ -47,13 +47,6 @@ public class ReadInput implements Runnable{
 			     
 		    listCommands = ReadAndSendConsoleOutput.getListCommands();
 		    command = listCommands.getFirst();
-		    //if (command.startsWith("startFish")){
-		    //String[] parts = command.split(" ");
-		    //ReadAndSendConsoleOutput.getListStarted().add(parts[1]);	
-		    //ReadAndSendConsoleOutput.isActivated = true;
-		    //} else {
-		    //System.out.println(stock);
-		    //}
 		    listCommands.removeFirst();
     				 
 		} else if (stock.startsWith("NOK")){
