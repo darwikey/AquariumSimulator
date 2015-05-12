@@ -2,6 +2,9 @@
 #define FISH_H
 #include "graph.h"
 
+enum path_way{
+  UNDEFINED_PATH_WAY, RANDOM_PATH_WAY, HORIZONTAL_PATH_WAY, VERTICAL_PATH_WAY
+};
 
 struct fish{
   int target_x, target_y; //position a atteindre
@@ -10,6 +13,7 @@ struct fish{
   char* name;
   int is_started;
   node* node;
+  enum path_way path_way;
 };
 
 struct aquarium{

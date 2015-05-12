@@ -105,6 +105,22 @@ void parse_coord(char* argument, int* coord_x, int* coord_y){
 }
 
 
+ enum path_way parse_path_way(char* argument){
+  if (strcmp(argument, "RandomPathWay") == 0){
+    return RANDOM_PATH_WAY;
+  }
+  else if(strcmp(argument, "HorizontalPathWay") == 0){
+    return HORIZONTAL_PATH_WAY;
+  }
+  else if(strcmp(argument, "VerticalPathWay") == 0){
+    return VERTICAL_PATH_WAY;
+  }
+  else{
+    return UNDEFINED_PATH_WAY;
+  }
+}
+
+
 char* parse_display_msg(char** arguments, struct aquarium *aquarium, struct display *display)
 {
   char* buffer = malloc(BUFFER_SIZE);
@@ -163,10 +179,16 @@ char* parse_display_msg(char** arguments, struct aquarium *aquarium, struct disp
 	  parse_coord(arguments[4], &fish->size_x, &fish->size_y);
 	  fish->node = display->node;
 	  
-	  //TODO modele de mobilité
-	  fish__add_fish(aquarium, fish);
+	  //modele de mobilité
+	  fish->path_way = parse_path_way(arguments[5]);
+	  if (fish->path_way == UNDEFINED_PATH_WAY){
+	    snprintf(buffer,BUFFER_SIZE,"NOK : modèle de mobilité inconnue\n");
+	  }
+	  else{
+	    fish__add_fish(aquarium, fish);
 	  
-	  snprintf(buffer,BUFFER_SIZE,"OK\n");
+	    snprintf(buffer,BUFFER_SIZE,"OK\n");
+	  }
 	}
 	else{
 	  snprintf(buffer,BUFFER_SIZE,"NOK : nécessite 5 arguments\n");
