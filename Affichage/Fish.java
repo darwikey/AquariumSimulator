@@ -1,5 +1,3 @@
-import java.util.LinkedList;
-
 public class Fish {
 
     private String fishType;
@@ -10,8 +8,7 @@ public class Fish {
     private boolean inversed;
     private double dist_x;
     private double dist_y;
-    private boolean started = false;
-    
+  
     private Point nextDest;
      
     private boolean hasArrived;    
@@ -21,57 +18,27 @@ public class Fish {
     	this.hasArrived = false;
     	this.fishType = fishType;
     	this.size_x = size_x;
-	this.size_y = size_y;
-	this.coord = coord;
-	this.dist_x = nextDest.x - coord.x;
-	this.dist_y =  nextDest.y - coord.y;
-	this.timeToDest = time;
-	this.inversed = false;
+    	this.size_y = size_y;
+    	this.coord = coord;
+    	this.dist_x = nextDest.x - coord.x;
+    	this.dist_y =  nextDest.y - coord.y;
+    	this.timeToDest = time;
+    	this.inversed = false;
     }
      
     //Return time repaint
     public void move (int time_elapsed){
-	/*	if (nextDest.size() == 0){   
-    		hasArrived = true;
-    		System.out.println("finished");
-		} else { */   	
-	/*if (Math.abs(nextDestx-coord.x) > 1.0 || Math.abs(nextDest.y-coord.y) > 1.0){		
-	  coord.x += dist_x/(timeToDest*1000/timeElapsed);
-	  coord.y += dist_y/(timeToDest*1000/timeElapsed);
-
-	  }
-	    			
-	    		
-	    	
-	    		
-	  this.dist_x = nextDest.x - coord.x;
-	  this.dist_y =  nextDest.y - coord.y;
-	*/
 	
-	if (started){
-	    double dx = nextDest.x - coord.x;
-	    double dy = nextDest.y - coord.y;
-	    double l = Math.sqrt(dx * dx + dy * dy);
-	    double speed = l/time_elapsed;
-	    if (Math.abs(dx) > 1.0 || Math.abs(dy) > 1.0){
-	   
- 
-		dx = (dx / l) * time_elapsed * speed;
-		dy = (dy / l) * time_elapsed * speed;
-		dx = (dx / l) * time_elapsed * speed;
-		dy = (dy / l) * time_elapsed * speed;
- 
-		coord.x += dx;
-		coord.y += dy;
-		coord.x += dx;
-		coord.y += dy;
-	    }
+		if (Math.abs(nextDest.x-coord.x) > 1.0 || Math.abs(nextDest.y-coord.y) > 1.0){		
+		  coord.x += dist_x/(timeToDest*1000/time_elapsed);
+		  coord.y += dist_y/(timeToDest*1000/time_elapsed);
+		  }
+		else {
+			hasArrived = true;
+		}
+		    			
 	}
-    }
-
     
-
-
 
     public boolean compareFish (Fish f){
 	return (fishType.equals(f.getFishType()));
@@ -129,8 +96,5 @@ public class Fish {
 	coord = p;
     }
 
-    public void startFish(){
-	this.started = true;
-    }
 	 
 }

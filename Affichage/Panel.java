@@ -1,5 +1,4 @@
-	import java.awt.Color;
-	import java.awt.Graphics;
+import java.awt.Graphics;
 	import java.awt.Image;
 	import java.io.File;
 	import java.io.IOException;
@@ -13,18 +12,7 @@
 	 
 	public class Panel extends JPanel {
 	
-	    //private LinkedList <String> listNameFish;
 	    private LinkedList <Fish> listFish;
-	
-	
-	    /*public Panel (LinkedList <Fish> lf){
-	    	listFish = lf;
-	    	listNameFish = new LinkedList <String> ();
-	    	for (int i=0; i < lf.size();i++){
-	    		listNameFish.add(listFish.get(i).getFishType());
-	    	}
-	
-	    }*/
 	    
 	    public Panel (){
 	    	listFish = new LinkedList<Fish>();
@@ -38,10 +26,6 @@
 	    	return listFish;
 	    }
 		
-	
-	    // list [PoissonRouge at 90x4,10x4,5] [Joli at 20x80,12x6,5]
-	    // list [PoissonRouge at 90x4,20x20,5]
-	    // list [PoissonRouge at 90x4,20x20,5] [PoissonRouge at 80x40,20x20,5] [PoissonRouge at 200x60,20x20,5]
 	    
 	    public void paintComponent(Graphics g){
 	    	
@@ -60,14 +44,12 @@
 	        	g.drawImage(img, 0, 0, tailleEcranX, tailleEcranY, this);
 	        	
 	
-	        	for (int i =0; i < listFish.size(); i++){			    
+	        	for (int i =0; i < listFish.size(); i++){
+			    
 	        		img = ImageIO.read(new File("res/"+listFish.get(i).getFishType()+".png"));
 	        		posX = ((int)listFish.get(i).getCoord().x) * tailleEcranX / 100;
 	        		posY = ((int)listFish.get(i).getCoord().y) * tailleEcranY / 100;
 	        		
-	        		//System.out.println("iiii "+posX+" "+posY);
-	        		
-	        		//System.out.println("iiii "+listFish.get(i).getCoord().x+" "+listFish.get(i).getCoord().y);
 	        			
 	        		tailleX = listFish.get(i).getSizeX() * tailleEcranX / 100;
 	        		tailleY = listFish.get(i).getSizeY() * tailleEcranY / 100;    		
