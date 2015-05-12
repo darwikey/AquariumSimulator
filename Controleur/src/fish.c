@@ -24,6 +24,8 @@ struct fish* fish__create_fish(char* name){
 
   f->node = NULL;
 
+  f->path_way = UNDEFINED_PATH_WAY;
+
   return f;
 }
 
@@ -64,6 +66,7 @@ int fish__start_fish(struct aquarium* a, char* fish_name){
 int fish__remove_fish(struct aquarium* a, char* fish_name){
   for (int i = 0; i < a->fish_number; i++){
     if (strcmp(a->fishs[i]->name, fish_name) == 0){
+      free(a->fishs[i]->name);
       free(a->fishs[i]);
 
       for (int j = i; j < a->fish_number - 1; j++){
@@ -156,10 +159,25 @@ void fish__update(struct aquarium* a){
 	  }
 	}
 
-	a->fishs[i]->target_x = (rand() % 150) - 25;
-	a->fishs[i]->target_y = (rand() % 150) - 25;
+	switch(a->fishs[i]->path_way){
+	default:
+	case RANDOM_PATH_WAY:
+	  a->fishs[i]->target_x = (rand() % 150) - 25;
+	  a->fishs[i]->target_y = (rand() % 150) - 25;
+	  break;
 
-	 a->fishs[i]->delay = rand() % 5 + 3;
+	case HORIZONTAL_PATH_WAY:
+	  a->fishs[i]->target_x = 120;
+	  a->fishs[i]->target_y = 0;
+	  break;
+
+	case VERTICAL_PATH_WAY:
+	  a->fishs[i]->target_x = 0;
+	  a->fishs[i]->target_y = 120;
+	  break;
+	}
+
+	a->fishs[i]->delay = rand() % 4 + 4;
       }
     }
 
