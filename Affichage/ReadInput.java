@@ -29,7 +29,8 @@ public class ReadInput implements Runnable{
     		while (true){
     			stock = in.readLine();	
 			//System.out.println("on recoit : " + stock);
-    			 if (stock.startsWith("list")){		   
+    			 if (stock.startsWith("list")){
+			     System.out.println("on recoit : " + stock);
     				 listFishString = stock;
     				 listFishes = p.parseFishList(listFishString); 
     				 LinkedList<Juhnytg> positions = new LinkedList<Juhnytg>();
