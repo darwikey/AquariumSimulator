@@ -1,25 +1,79 @@
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.LinkedList;
+
+
 public class Client {
+
     public static Socket socket = null;
-    public static Thread t1;
-    //list [PoissonRouge at 90x4,20x20,5]
+
     public static void main(String[] args) {
-	Window w = new Window();
-	ReadCfg rc = new ReadCfg("Affichage.cfg");
-	rc.read();
-	try {
-	    socket = new Socket(rc.getControllerAdress(),rc.getControllerPort());
-	    System.out.println("je sors socket");
-	    t1 = new Thread(new Connexion(socket, rc, w));
-	    t1.start();
-	} catch (UnknownHostException e) {
-	    System.err.println("Can not connect to the address "+socket.getLocalAddress());
-	}catch (IOException e) {
-	    System.err.println("No server listening port "+socket.getLocalPort());
-	}
-	w.autoRepaint();
-    }
+
+    	PrintWriter out;
+    	BufferedReader in;
+    	String idClient;
+    	String idInitial;
+    	
+    	Window w = new Window();
+
+    	ReadCfg rc = new ReadCfg("Affichage.cfg");
+    	rc.read();
+	 
+    	try {
+    		socket = new Socket(rc.getControllerAdress(),rc.getControllerPort());
+    		out = new PrintWriter(socket.getOutputStream());
+    		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));	
+	    
+    		//Connection
+    		if (rc.getId().equals("")){
+    			out.println("hello");
+    			idInitial = "";
+    		}
+    		else{
+    			out.println("hello in as "+rc.getId());
+    			idInitial = rc.getId();
+    		}
+	    
+    		out.flush();
+    		String stock = in.readLine();
+	    
+    		if (stock.compareTo("no greeting") == 0){
+    			System.out.println(stock);	
+    			socket.close();
+		    }
+		    
+		    else{
+		    	String[] parts = stock.split(" ");
+		    	idClient = parts[1];
+		    	if (!idClient.equals(idInitial))
+		    		System.out.println("Nouvel id: "+idClient);
+		    }
+	
+    		//Command line ???
+		//out.println("getFishesContinuously");
+		//  out.flush();
+		    
+		    Thread t1 = new Thread(new SendPing(rc.getControllerPort(), out));
+		    Thread t2 = new Thread(new ReadInput(w, in, socket));
+		    Thread t3 = new Thread(new ReadAndSendConsoleOutput(out));
+		    
+		    t1.start();
+		    t2.start();
+		    t3.start();
+	
+		} catch (UnknownHostException e) {
+			System.err.println("Can not connect to the address "+socket.getLocalAddress());
+		}catch (IOException e) {
+		    
+		    System.err.println("No server listening port "+socket.getLocalPort());
+		}
+		
+		w.autoRepaint();
+		
+	    }
+    
+
 }

@@ -6,20 +6,15 @@ import java.util.LinkedList;
 
 public class Parser { 
 
-    //private String fishType = "";
-    //LinkedList<Fish> fishes = new LinkedList<Fish>();
-    //String str = new String();
     Scanner sc;
     private LinkedList <Juhnytg> fishPositions = null;
 
     public Parser(){
 	sc = new Scanner(System.in);
+	fishPositions = new LinkedList<Juhnytg> ();
 
     }
 
-    /*public Fish getFish(int index){
-	return fishes.get(index);
-	}*/
 
     public String readInput(){
 	String str = new String();
@@ -29,15 +24,6 @@ public class Parser {
 
     }   
     
-
-    public String parseGreeting(String str){
-    	String[] parts = str.split(" ");
-    	System.out.println("paaart 1: "+ parts[1]);
-	return parts[1];
-    }
-
-
-
 
     public LinkedList<Fish> parseFishList(String str){
     	 
@@ -93,11 +79,8 @@ public class Parser {
 		    }
 
 		    if (!found){
-			// un poisson arrive, soit nouvellement créé, posi aléatoire ? sinon arrive d'un bord ? info à donner.
+		        
 		    }
-
-		    
-		    
 		    
 		}
 		
@@ -109,14 +92,8 @@ public class Parser {
 	
     }
 
-    public void fillPositionsList(LinkedList<Juhnytg> list){
-	
-	fishPositions = list;
-
+    public void fillPositionsList(LinkedList<Juhnytg> list){	
+    	fishPositions = list;
     }
-
-    
-
-    //public LinkedList<Fish> getFishes(){ return fishes; }
 
 }

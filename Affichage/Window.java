@@ -1,47 +1,29 @@
 import javax.swing.JFrame;
-
 import java.awt.Color;
 import java.util.LinkedList;
-import java.awt.TextField;
 import java.awt.BorderLayout;
 
 
-
-/*
-  Cas ou la liste des prochaines dest est superieur a la liste courante
-*/
-
-
-
 @SuppressWarnings("serial")
-public class Window extends JFrame {
-
-    
+public class Window extends JFrame {  
     private final int refreshRate = 100; // milliseconds
     
     private Panel pan;	
-    private InputRaffin textField;
     private LinkedList <Fish> listFishes;  
+    private LinkedList<String>listStarted;
 
     public Window() {
-
     	listFishes = new LinkedList <Fish> ();
-    	textField = new InputRaffin();
     	this.getContentPane().setLayout(new BorderLayout());
-
-	pan = new Panel();
-	this.add(pan, BorderLayout.CENTER);
-		    
-	this.add(textField, BorderLayout.SOUTH);	    
-	this.setTitle("Aquarium");
-	this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-	//this.setSize(900, 600);
-	this.setBackground(Color.WHITE);
-	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	this.setLocationRelativeTo(null);
-	//this.setContentPane(pan);
-	this.setVisible(true);
-	this.pack();
+    	pan = new Panel();
+    	this.add(pan, BorderLayout.CENTER);		    	    
+    	this.setTitle("Aquarium");
+    	this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+    	this.setBackground(Color.WHITE);
+    	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	this.setLocationRelativeTo(null);
+    	this.setVisible(true);
+    	this.pack();
     }  
 	    
     public void initListFish (LinkedList<Fish>lf){
@@ -55,26 +37,31 @@ public class Window extends JFrame {
     
     }
     
-    private void repaintFish (LinkedList<String> listStarted){
-	for (int j = 0; j < listStarted.size(); j++){
-	    for (int i =0; i < listFishes.size(); i++){
-		if(listStarted.get(j).equals(listFishes.get(i).getFishType())){		  		
-		    listFishes.get(i).move(refreshRate);
-		}
-	    }
-	}
-    }
     
+    
+    private void repaintFish (LinkedList<String> listStarted){
+    	Fish f;
+    	for (int i =0; i < listFishes.size(); i++){
+    		f = listFishes.get(i);
+    		if (listStarted.contains(f.getFishType())){
+    			if (!f.getHasArrived()){
+    				f.move(refreshRate);
+    			}
+    		}
+   		}
+    }
+		
+    
+    //startFish Stylay
     
     
     public void autoRepaint (){
     	while (true){	
-	    
+	    listStarted = ReadAndSendConsoleOutput.getListStarted();
 
-	    if (!ReadAndSendConsoleOutput.getListStarted().isEmpty()){
-		repaintFish(ReadAndSendConsoleOutput.getListStarted());    
-		pan.repaint();
-		textField.repaint();
+	    if (ReadAndSendConsoleOutput.isActivated){
+	    	repaintFish(listStarted);    
+	    	pan.repaint();
 	    }
 	    try {
 		Thread.sleep(refreshRate);
@@ -89,9 +76,3 @@ public class Window extends JFrame {
     
 
 }
-
-
-
-
-
-
