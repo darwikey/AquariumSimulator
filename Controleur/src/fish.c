@@ -83,9 +83,12 @@ int fish__remove_fish(struct aquarium* a, char* fish_name){
 
 
 void fish__status(struct aquarium* a, char* buffer, int buffer_length){
+    int used_char = snprintf(buffer, buffer_length, "%d poissons trouvés",a->fish_number);
+    buffer += used_char;
+    buffer_length -= used_char;
   for (int i = 0; i < a->fish_number; i++){
     struct fish* f = a->fishs[i];
-    int n = snprintf(buffer, buffer_length, "fish %s at %dx%d, %dx%d", f->name, f->target_x, f->target_y, f->size_x, f->size_y);
+    int n = snprintf(buffer, buffer_length, "\nfish %s at %dx%d, %dx%d", f->name, f->target_x, f->target_y, f->size_x, f->size_y);
 
     if (n > 0 && n < buffer_length){
       buffer += n;

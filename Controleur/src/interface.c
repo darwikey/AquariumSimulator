@@ -165,7 +165,12 @@ char* parse_display_msg(char** arguments, struct aquarium *aquarium, struct disp
 
   else if (strcmp(arguments[0], "status") == 0) 
     {
-      fish__status(aquarium, buffer, BUFFER_SIZE);
+        if (display->node){
+            int char_used = snprintf(buffer, BUFFER_SIZE,"OK:Connecté au contrôleur,");
+            fish__status(aquarium, buffer+char_used,BUFFER_SIZE-char_used);
+        }else{
+            snprintf(buffer,BUFFER_SIZE,"NOK:Pas connecté au contrôleur (try \"hello\")\n");
+        }
     }
 
   else if (strcmp(arguments[0], "addFish") == 0) 
@@ -187,8 +192,8 @@ char* parse_display_msg(char** arguments, struct aquarium *aquarium, struct disp
 	  }
 	  else{
 	    fish__add_fish(aquarium, fish);
+            snprintf(buffer, BUFFER_SIZE,"OK\n");
 	  
-	    snprintf(buffer,BUFFER_SIZE,"OK\n");
 	  }
 	}
 	else{
