@@ -4,13 +4,12 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include "utils.h"
+#include "config.h"
 
 
 #define BUFFER_SIZE 2048
 #define LISTEN_MAX 5
 #define THREAD_NB 16
-#define LOG_OUT_DELAY 60
-#define GET_FISH_INTERVAL 1
 
 struct thread_parameter{
   struct aquarium* aquarium;
@@ -29,7 +28,7 @@ void network__timer_log_out(struct timeval* timer, int client_sock, struct aquar
 
 
 //lance les threads attendant un client
-void network__launch(uint16_t port_number, struct aquarium* aquarium){
+void network__launch(struct aquarium* aquarium){
 
   struct sockaddr_in dest; 
   
@@ -49,7 +48,7 @@ void network__launch(uint16_t port_number, struct aquarium* aquarium){
   memset(&dest, 0, sizeof(dest));    
   dest.sin_family = AF_INET;
   dest.sin_addr.s_addr = htonl(INADDR_ANY);
-  dest.sin_port = htons(port_number); // set destination port number
+  dest.sin_port = htons(config__get_port()); // set destination port number
   
   if (bind(sock, (struct sockaddr *)&dest, sizeof(struct sockaddr)) == SOCKET_ERROR){
     perror("bind()");
@@ -172,7 +171,7 @@ void network__timer_get_fish(struct timeval* timer, int client_sock, struct disp
   struct timeval current_time;
   gettimeofday(&current_time, NULL);
 
-  if (current_time.tv_sec > timer->tv_sec + GET_FISH_INTERVAL){
+  if (current_time.tv_sec > timer->tv_sec + config__get_fish_update()){
     // reset du timer
     gettimeofday(timer, NULL);
 
@@ -190,12 +189,13 @@ void network__timer_log_out(struct timeval* timer, int client_sock, struct aquar
   struct timeval current_time;
   gettimeofday(&current_time, NULL);
 
-  if (current_time.tv_sec > timer->tv_sec+LOG_OUT_DELAY){
+  if (current_time.tv_sec > timer->tv_sec + config__get_display_timeout()){
     display->log_out = 1;
 
     char tmp[BUFFER_SIZE] = {0};
-    snprintf(tmp, BUFFER_SIZE, "pas d'interaction depuis %d secondes. La connexion va être interrompue.\nLa prochaine fois utilisez la commande ping\n",LOG_OUT_DELAY);
+    snprintf(tmp, BUFFER_SIZE, "pas d'interaction depuis %d secondes. La connexion va être interrompue.\nLa prochaine fois utilisez la commande ping\n", config__get_display_timeout());
     write(client_sock, tmp, strlen(tmp));
-    log(LOG_INFO,"client %s inactif depuis %d secondes\n",display->node ? graph__get_node_name(a->graph, display->node) : "(inconu)",LOG_OUT_DELAY);
+
+    log(LOG_INFO,"client %s inactif depuis %d secondes\n",display->node ? graph__get_node_name(a->graph, display->node) : "(inconu)", config__get_display_timeout());
   }
 }
