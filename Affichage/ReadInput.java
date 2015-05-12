@@ -28,7 +28,7 @@ public class ReadInput implements Runnable{
     	try {	  	       		   	
     		while (true){
     			stock = in.readLine();	
-			System.out.println("on recoit : " + stock);
+			//System.out.println("on recoit : " + stock);
     			 if (stock.startsWith("list")){		   
     				 listFishString = stock;
     				 listFishes = p.parseFishList(listFishString); 
@@ -37,11 +37,11 @@ public class ReadInput implements Runnable{
     					 positions.addFirst(new Juhnytg(listFishes.get(i).getFishType(), listFishes.get(i).getCoord()));
 					 //System.out.println("coord : " + listFishes.get(i).getCoord());
     				 }
-				 System.out.println("positions : " + positions.get(0).getPos().x + " " + positions.get(0).getPos().y);
+				 //System.out.println("positions : " + positions.get(0).getPos().x + " " + positions.get(0).getPos().y);
     				 p.fillPositionsList(positions);
     				 window.updateFishList(listFishes);
     			 } else if (stock.startsWith("OK")){
-			     System.out.println(stock);
+			     System.out.println("->"+stock);
     				 listCommands = ReadAndSendConsoleOutput.getListCommands();
     				 command = listCommands.getFirst();
     				 //if (command.startsWith("startFish")){
@@ -49,18 +49,21 @@ public class ReadInput implements Runnable{
     					 //ReadAndSendConsoleOutput.getListStarted().add(parts[1]);	
     					 //ReadAndSendConsoleOutput.isActivated = true;
     				 //} else {
-    					 System.out.println(stock);
+				 //System.out.println(stock);
 					 //}
     				 listCommands.removeFirst();
     				 
     			 } else if (stock.startsWith("NOK")){
     				 listCommands = ReadAndSendConsoleOutput.getListCommands();
     				 listCommands.removeFirst();
-    				 System.out.println(stock);
+    				 System.out.println("->"+stock);
     			 } else if (stock.startsWith("bye")){
+			     System.out.println("->"+stock);
     				 socket.close();
 				 System.exit(0);
     			 } 
+
+			
     		}
     	}
 	      		
