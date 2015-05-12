@@ -6,7 +6,7 @@ Projet de réseaux Enseirb-Matméca 2015
 Controleur
 =============================================
 = Pour compiler les sources =
-* Se placer dans Controller, lancer la commande "cmake ." puis "make"
+* Se placer dans Controleur, lancer la commande "cmake ." puis "make"
 
 = Dépendance =
 * bibliothèque graphviz/cgraph
