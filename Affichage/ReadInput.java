@@ -44,13 +44,13 @@ public class ReadInput implements Runnable{
 			     System.out.println(stock);
     				 listCommands = ReadAndSendConsoleOutput.getListCommands();
     				 command = listCommands.getFirst();
-    				 if (command.startsWith("startFish")){
-    					 String[] parts = command.split(" ");
-    					 ReadAndSendConsoleOutput.getListStarted().add(parts[1]);	
-    					 ReadAndSendConsoleOutput.isActivated = true;
-    				 } else {
+    				 //if (command.startsWith("startFish")){
+				 //String[] parts = command.split(" ");
+    					 //ReadAndSendConsoleOutput.getListStarted().add(parts[1]);	
+    					 //ReadAndSendConsoleOutput.isActivated = true;
+    				 //} else {
     					 System.out.println(stock);
-    				 }
+					 //}
     				 listCommands.removeFirst();
     				 
     			 } else if (stock.startsWith("NOK")){
@@ -59,7 +59,7 @@ public class ReadInput implements Runnable{
     				 System.out.println(stock);
     			 } else if (stock.startsWith("bye")){
     				 socket.close();
-				 exit();
+				 System.exit(0);
     			 } 
     		}
     	}

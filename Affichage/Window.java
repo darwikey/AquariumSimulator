@@ -39,16 +39,16 @@ public class Window extends JFrame {
     
     
     
-    private void repaintFish (LinkedList<String> listStarted){
+    private void repaintFish (){
     	Fish f;
     	for (int i =0; i < listFishes.size(); i++){
     		f = listFishes.get(i);
-    		if (listStarted.contains(f.getFishType())){
+    		
     			if (!f.getHasArrived()){
     				f.move(refreshRate);
     			}
     		}
-   		}
+   		
     }
 		
     
@@ -57,12 +57,12 @@ public class Window extends JFrame {
     
     public void autoRepaint (){
     	while (true){	
-	    listStarted = ReadAndSendConsoleOutput.getListStarted();
-	    System.out.println("listStarted " + listStarted);
-	    if (ReadAndSendConsoleOutput.isActivated){
-	    	repaintFish(listStarted);    
+	    // listStarted = ReadAndSendConsoleOutput.getListStarted();
+	    //System.out.println("listStarted " + listStarted);
+	    //if (ReadAndSendConsoleOutput.isActivated){
+	    	repaintFish();    
 	    	pan.repaint();
-	    }
+		//}
 	    try {
 		Thread.sleep(refreshRate);
 	    } catch (InterruptedException e) {
