@@ -25,7 +25,7 @@ static struct thread_parameter param;
 // fonctions internes
 void* network__wait(void* parameter);
 void network__timer_get_fish(struct timeval* timer, int client_sock, struct display* display, struct aquarium* aquarium);
-void network__timer_log_out(struct timeval* timer, int client_sock, struct display* display);
+void network__timer_log_out(struct timeval* timer, int client_sock, struct aquarium* a, struct display* display);
 
 
 //lance les threads attendant un client
@@ -103,6 +103,7 @@ void* network__wait(void* parameter){
     gettimeofday(&get_fish_timer, NULL);
     struct timeval last_interaction_timer;
     last_interaction_timer = get_fish_timer;
+    log(LOG_INFO,"client log in\n");
 
  
     while (!display.log_out){
@@ -149,13 +150,15 @@ void* network__wait(void* parameter){
 	network__timer_get_fish(&get_fish_timer, client_sock, &display, param->aquarium);
       }
 
-      network__timer_log_out(&last_interaction_timer, client_sock, &display);
+      network__timer_log_out(&last_interaction_timer, client_sock, param->aquarium,  &display);
     }
 
 
     // retire le client du graphe
     if (display.node)
       graph__node_disconnect(param->aquarium->graph, display.node);
+
+    log(LOG_INFO,"client %s déconnecté\n",display.node ? graph__get_node_name(param->aquarium->graph, display.node) : "(inconu)");
 
     // ferme le socket
     close(client_sock);
@@ -183,7 +186,7 @@ void network__timer_get_fish(struct timeval* timer, int client_sock, struct disp
 }
 
 
-void network__timer_log_out(struct timeval* timer, int client_sock, struct display* display){
+void network__timer_log_out(struct timeval* timer, int client_sock, struct aquarium*a, struct display* display){
   struct timeval current_time;
   gettimeofday(&current_time, NULL);
 
@@ -193,6 +196,6 @@ void network__timer_log_out(struct timeval* timer, int client_sock, struct displ
     char tmp[BUFFER_SIZE] = {0};
     snprintf(tmp, BUFFER_SIZE, "pas d'interaction depuis %d secondes. La connexion va être interrompue.\nLa prochaine fois utilisez la commande ping\n",LOG_OUT_DELAY);
     write(client_sock, tmp, strlen(tmp));
-    log(LOG_INFO,"client déconnecté car inactif depuis %d secondes\n",LOG_OUT_DELAY);
+    log(LOG_INFO,"client %s inactif depuis %d secondes\n",display->node ? graph__get_node_name(a->graph, display->node) : "(inconu)",LOG_OUT_DELAY);
   }
 }

@@ -7,6 +7,7 @@ enum log_level{
 };
 
 void log_init();
+void log_close();
 
 void _log(enum log_level level, const char *fmt, ...)
         __attribute__((format (printf, 2, 3)));
