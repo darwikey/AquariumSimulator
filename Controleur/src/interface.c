@@ -107,13 +107,13 @@ void parse_coord(char* argument, int* coord_x, int* coord_y){
 
 
  enum path_way parse_path_way(char* argument){
-  if (strcmp(argument, "RandomPathWay") == 0){
+  if (strcmp(argument, "RandomWayPoint") == 0){
     return RANDOM_PATH_WAY;
   }
-  else if(strcmp(argument, "HorizontalPathWay") == 0){
+  else if(strcmp(argument, "HorizontalWayPoint") == 0){
     return HORIZONTAL_PATH_WAY;
   }
-  else if(strcmp(argument, "VerticalPathWay") == 0){
+  else if(strcmp(argument, "VerticalWayPoint") == 0){
     return VERTICAL_PATH_WAY;
   }
   else{
