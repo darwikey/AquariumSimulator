@@ -3,6 +3,7 @@
 #include "interface.h"
 #include <sys/time.h>
 #include <unistd.h>
+#include "utils.h"
 
 
 #define BUFFER_SIZE 2048
@@ -192,5 +193,6 @@ void network__timer_log_out(struct timeval* timer, int client_sock, struct displ
     char tmp[BUFFER_SIZE] = {0};
     snprintf(tmp, BUFFER_SIZE, "pas d'interaction depuis %d secondes. La connexion va être interrompue.\nLa prochaine fois utilisez la commande ping\n",LOG_OUT_DELAY);
     write(client_sock, tmp, strlen(tmp));
+    log(LOG_INFO,"client déconnecté car inactif depuis %d secondes\n",LOG_OUT_DELAY);
   }
 }
