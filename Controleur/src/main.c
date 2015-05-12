@@ -14,6 +14,7 @@ int main(int argc, char** argv)
   srand(time(NULL));
 
   log_init();
+  log(LOG_INFO, "Init\n");
 
   struct aquarium aquarium;
   fish__init_aquarium(&aquarium);

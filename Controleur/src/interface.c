@@ -6,6 +6,7 @@
 #include "graph.h"
 #include "fish.h"
 #include "network.h"
+#include "utils.h"
 
 
 #define ARGUMENT_SIZE 10
@@ -345,12 +346,12 @@ char* parse_user_msg(char** arguments, struct aquarium * aquarium)
 
 
 char* interface__compute_display_input(struct aquarium* aquarium, struct display* display, char* command){
-    printf("compute command \"%s\"\n",command);
+  log(LOG_INFO, "compute command \"%s\"\n",command);
 
-    char** arguments = parse_command(command);
-    char* msg = parse_display_msg(arguments, aquarium, display);
+  char** arguments = parse_command(command);
+  char* msg = parse_display_msg(arguments, aquarium, display);
+    
 
-
-    return msg;
+  return msg;
 
 }
