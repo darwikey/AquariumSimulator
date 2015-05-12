@@ -10,9 +10,20 @@ Controleur
 
 = Dépendance =
 * bibliothèque graphviz/cgraph
+* pThread
 
 = Pour exécuter =
 * Se placer dans Serveur, lancer la commande "./Controleur"
+
+
+= Liste des commandes disponibles =
+* load 
+* show 
+* add
+* del
+* remove
+* save
+* exit
 
 
 Client
