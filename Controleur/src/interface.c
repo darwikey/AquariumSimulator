@@ -243,7 +243,7 @@ char* parse_display_msg(char** arguments, struct aquarium *aquarium, struct disp
       }
       else{
 	display->get_fish_continously = 1;
-        snprintf(buffer, BUFFER_SIZE, "");
+	buffer[0]= '\0';
       }
     }
 

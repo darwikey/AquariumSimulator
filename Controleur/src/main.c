@@ -5,12 +5,15 @@
 #include "network.h"
 #include "time.h"
 #include "graph.h"
+#include "utils.h"
 
 
 int main(int argc, char** argv)
 {
   // initialise les nombres aléatoires
   srand(time(NULL));
+
+  log_init();
 
   struct aquarium aquarium;
   fish__init_aquarium(&aquarium);
