@@ -3,20 +3,41 @@ AquariumSimulator
 Projet de réseaux Enseirb-Matméca 2015
 
 
+Controleur
+=============================================
 = Pour compiler les sources =
-* Client : se placer dans Affichage, lancer la commande "javac *.java"
-dépendance : 
-* Serveur : se placer dans Serveur, lancer la commande "cmake ." puis "make"
-
+* Se placer dans Controleur, lancer la commande "cmake ." puis "make"
 
 = Dépendance =
 * bibliothèque graphviz/cgraph
+* pThread
+
+= Pour exécuter =
+* Se placer dans Serveur, lancer la commande "./Controleur"
+
+
+= Liste des commandes disponibles =
+* load 
+* show 
+* add
+* del
+* remove
+* save
+* exit
+
+
+Client
+=============================================
+= Pour compiler les sources =
+* Se placer dans Affichage, lancer la commande "javac *.java"
+
+
+= Dépendance =
 * Awt / swing
 
 
 = Pour exécuter = 
-* Client : se placer dans Affichage, lancer la commande "java Client" ou "java Client -v" (degré de verbosité)
-* Serveur : se placer dans Serveur, lancer la commande "./Controleur"
+* Se placer dans Affichage, lancer la commande "java Client" ou "java Client -v" (degré de verbosité)
 
 
 = Liste des poissons disponibles =

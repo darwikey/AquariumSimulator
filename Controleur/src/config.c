@@ -33,7 +33,7 @@ static int config__parser_handler(void* data, const char* section, const char* n
 void config__init(){
   log(LOG_INFO, "Charge config"); 
 
-  if (ini_parse("controller.ini", config__parser_handler, &config) < 0){
+  if (ini_parse("controleur.ini", config__parser_handler, &config) < 0){
     fprintf(stderr, "impossible de charger controller.ini");
     exit(EXIT_FAILURE);
   }  
