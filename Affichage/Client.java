@@ -65,10 +65,10 @@ public class Client {
 	    Thread t1 = new Thread(new SendPing(rc.getControllerPort(), out));	
 	    
 	    //Receive and read messages from the controller
-	    Thread t2 = new Thread(new ReadInput(w, in, socket));
+	    Thread t2 = new Thread(new ReadServerMessages(w, in, socket));
 
 	    //Read console output
-	    Thread t3 = new Thread(new ReadAndSendConsoleOutput(out));
+	    Thread t3 = new Thread(new ReadUserMessages(out));
 		    
 	    t1.start();
 	    t2.start();

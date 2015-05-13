@@ -67,7 +67,7 @@ public class Parser {
 		    
 		    if (!found){
 			fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y, speed, new Point(0,0)));
-			System.out.println("not found");
+			//System.out.println("not found");
 		        
 		    }
 		    

@@ -77,26 +77,28 @@ public class Panel extends JPanel {
 	    for (int i =0; i < listFish.size(); i++){
 		  		
 		/*if (fishEnum.contains(listFish.get(i).getFishType()))
-		    fishPath = "res/"+listFish.get(i).getFishType()+".png";
-		else
-		    fishPath = defaultPath;
+		  fishPath = "res/"+listFish.get(i).getFishType()+".png";
+		  else
+		  fishPath = defaultPath;
 			    
 		*/
 		fishPath = pathToFish (fishEnum,listFish.get(i).getFishType());
 		
 		img = ImageIO.read(new File(fishPath));
-		posX = ((int)listFish.get(i).getCoord().x) * tailleEcranX / 100;
-		posY = ((int)listFish.get(i).getCoord().y) * tailleEcranY / 100;
-	        		
+		if(listFish.get(i) != null){
+		    posX = ((int)listFish.get(i).getCoord().x) * tailleEcranX / 100;
+		    posY = ((int)listFish.get(i).getCoord().y) * tailleEcranY / 100;
+		
 	        			
-		tailleX = listFish.get(i).getSizeX() * tailleEcranX / 100;
-		tailleY = listFish.get(i).getSizeY() * tailleEcranY / 100;    		
+		    tailleX = listFish.get(i).getSizeX() * tailleEcranX / 100;
+		    tailleY = listFish.get(i).getSizeY() * tailleEcranY / 100;    		
 	        			
-		if (listFish.get(i).getInversed()){
-		    g.drawImage(img, posX+tailleX, posY, -tailleX, tailleY, this);
-		}
-		else{
-		    g.drawImage(img, posX, posY, tailleX, tailleY, this);
+		    if (listFish.get(i).getInversed()){
+			g.drawImage(img, posX+tailleX, posY, -tailleX, tailleY, this);
+		    }
+		    else{
+			g.drawImage(img, posX, posY, tailleX, tailleY, this);
+		    }
 		}
 	        		
 	    }

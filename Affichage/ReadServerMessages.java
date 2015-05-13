@@ -6,14 +6,14 @@ import java.util.HashMap;
 
 
 
-public class ReadInput implements Runnable{
+public class ReadServerMessages implements Runnable{
 
     private Socket socket = null;
     private BufferedReader in = null; 
     private Window window;
     private LinkedList <Fish> listFishes;
 
-    public ReadInput(Window w, BufferedReader in, Socket s){
+    public ReadServerMessages(Window w, BufferedReader in, Socket s){
     	window = w;
     	this.in = in;
     	this.socket = s;
@@ -45,12 +45,12 @@ public class ReadInput implements Runnable{
 		    if(Client.displayMessages)
 			System.out.println("->"+stock);
 			     
-		    listCommands = ReadAndSendConsoleOutput.getListCommands();
+		    listCommands = ReadUserMessages.getListCommands();
 		    command = listCommands.getFirst();
 		    listCommands.removeFirst();
     				 
 		} else if (stock.startsWith("NOK")){
-		    listCommands = ReadAndSendConsoleOutput.getListCommands();
+		    listCommands = ReadUserMessages.getListCommands();
 		    listCommands.removeFirst();
 		    if(Client.displayMessages)
 			System.out.println("->"+stock);

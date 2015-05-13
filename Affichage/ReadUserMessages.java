@@ -4,14 +4,14 @@ import java.util.LinkedList;
 
 
 
-public class ReadAndSendConsoleOutput implements Runnable{
+public class ReadUserMessages implements Runnable{
 
     private Scanner sc;
     private PrintWriter out;
     public static LinkedList <String> listCommands = null;
     
     
-    public ReadAndSendConsoleOutput(PrintWriter pw){
+    public ReadUserMessages(PrintWriter pw){
     	sc = new Scanner(System.in);
 	listCommands = new LinkedList <String> ();
 	out = pw;
