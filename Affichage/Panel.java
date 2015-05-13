@@ -6,7 +6,12 @@ import java.util.LinkedList;
 	
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-	
+
+/*
+
+  Thanks to the repaint method, displays the Fishes.
+
+ */	
 	
 @SuppressWarnings("serial")
 	 
@@ -70,25 +75,23 @@ public class Panel extends JPanel {
 	String fishPath;
 	boolean found = false;
 
+	int listSize = 0;
+	
+
 	try {        	
 	    img = ImageIO.read(new File("res/fond_ecran1.jpg"));
 	    g.drawImage(img, 0, 0, tailleEcranX, tailleEcranY, this);
-	        		
+	        	
+	    listSize = listFish.size();
 	    for (int i =0; i < listFish.size(); i++){
 		  		
-		/*if (fishEnum.contains(listFish.get(i).getFishType()))
-		  fishPath = "res/"+listFish.get(i).getFishType()+".png";
-		  else
-		  fishPath = defaultPath;
-			    
-		*/
 		fishPath = pathToFish (fishEnum,listFish.get(i).getFishType());
 		
 		img = ImageIO.read(new File(fishPath));
-		if(listFish.get(i) != null){
+
+		if(listSize == listFish.size() ){
 		    posX = ((int)listFish.get(i).getCoord().x) * tailleEcranX / 100;
-		    posY = ((int)listFish.get(i).getCoord().y) * tailleEcranY / 100;
-		
+		    posY = ((int)listFish.get(i).getCoord().y) * tailleEcranY / 100;	        		
 	        			
 		    tailleX = listFish.get(i).getSizeX() * tailleEcranX / 100;
 		    tailleY = listFish.get(i).getSizeY() * tailleEcranY / 100;    		
@@ -99,9 +102,9 @@ public class Panel extends JPanel {
 		    else{
 			g.drawImage(img, posX, posY, tailleX, tailleY, this);
 		    }
-		}
-	        		
+		} 
 	    }
+	    
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}       

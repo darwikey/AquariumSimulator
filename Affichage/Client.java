@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 /*
-Main class: Create connection with the controller and
+Main class: Create connection with the controller and create a window to display the fishes. Also creates 3 threads that respectively send ping, read server messages and read console input.
 */
 
 
@@ -52,6 +52,7 @@ public class Client {
 	    if (stock.compareTo("no greeting") == 0){
 		System.out.println(stock);	
 		socket.close();
+		System.exit(0);
 	    }
 		    
 	    else{

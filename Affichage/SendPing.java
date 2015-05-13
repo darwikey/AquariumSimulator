@@ -1,5 +1,10 @@
 import java.io.PrintWriter;
 
+/*
+  Sends a ping to the server each second.
+
+ */
+
 public class SendPing implements Runnable {
 
     private PrintWriter out = null;

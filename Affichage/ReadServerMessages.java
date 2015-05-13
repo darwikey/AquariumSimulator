@@ -4,7 +4,10 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.HashMap;
 
+/*
+  Reads the messages sent by the server and prints them when needed. Also updates the list of fishes of the window.
 
+ */
 
 public class ReadServerMessages implements Runnable{
 

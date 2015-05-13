@@ -2,6 +2,10 @@ import java.util.Scanner;
 import java.io.PrintWriter;
 import java.util.LinkedList;
 
+/*
+  Reads the input from the console and stores each command into a list.
+
+ */
 
 
 public class ReadUserMessages implements Runnable{

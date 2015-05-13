@@ -3,6 +3,11 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
  
+/*
+  Parses the .cfg file and retains its data in the class in order to connect to the server. 
+
+ */
+
 public class ReadCfg {
      
     private String file;

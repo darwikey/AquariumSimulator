@@ -32,6 +32,8 @@ dépendance :
 Pour envoyer plusieurs commandes en une seule fois, assurez-vous d'avoir copié-collé un retour à la ligne (ligne vide) à la fin. Il ne sera alors pas nécessaire d'appuyer sur la touche entrée.
 
 Si vous essayez d'ajouter un poisson dont le nom ne correspond pas à une image, l'image Base.png sera utilisée pour l'affichage.
+Si le nom du poisson contient le nom d'une des images, alors il sera représenté par cette image. 
+Ex : Empereur_1, Empereur_2, Empereurazerty, GrandEmpereur afficheront Empereur.png
 
 
 = Liste des commandes reconnues =

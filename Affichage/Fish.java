@@ -1,3 +1,7 @@
+/*
+  Describes a Fish. Contains attributes and a method to update its coordinates.
+
+ */
 public class Fish {
 
     private String fishType;
@@ -23,9 +27,14 @@ public class Fish {
     	this.dist_x = nextDest.x - coord.x;
     	this.dist_y =  nextDest.y - coord.y;
     	this.timeToDest = time;
-    	this.inversed = false;
+	if (dist_x < 0)
+	    this.inversed = true;
+	else 
+	    this.inversed = false;
     }
-     
+    
+    
+    
     //Return time repaint
     public void move (int time_elapsed){
 	
