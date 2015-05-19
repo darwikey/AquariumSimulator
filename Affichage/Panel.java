@@ -6,7 +6,12 @@ import java.util.LinkedList;
 	
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-	
+
+/*
+
+  Thanks to the repaint method, displays the Fishes.
+
+ */	
 	
 @SuppressWarnings("serial")
 	 
@@ -33,6 +38,26 @@ public class Panel extends JPanel {
     public LinkedList <Fish> getListFishes (){
 	return listFish;
     }
+
+    private String pathToFish (LinkedList <String> list, String fishType){
+	String fishPath = "res/";
+	String fishPath2 ="";
+	boolean found = false;
+
+	for(String str: list){
+	    if (fishType.contains(str)){
+		fishPath2 = str;
+		found = true;
+	    }
+	}
+	if (found){
+	    fishPath += fishPath2;
+	    fishPath +=".png";
+	} else {
+	    fishPath += "Base.png";
+	}
+	return fishPath;
+    }
 		
 	    
     public void paintComponent(Graphics g){
@@ -48,35 +73,38 @@ public class Panel extends JPanel {
 	int tailleY = 200;
 
 	String fishPath;
+	boolean found = false;
+
+	int listSize = 0;
+	
 
 	try {        	
 	    img = ImageIO.read(new File("res/fond_ecran1.jpg"));
 	    g.drawImage(img, 0, 0, tailleEcranX, tailleEcranY, this);
-	        		
+	        	
+	    listSize = listFish.size();
 	    for (int i =0; i < listFish.size(); i++){
+		  		
+		fishPath = pathToFish (fishEnum,listFish.get(i).getFishType());
 		
-		if (fishEnum.contains(listFish.get(i).getFishType()))
-		    fishPath = "res/"+listFish.get(i).getFishType()+".png";
-		else
-		    fishPath = defaultPath;
-			    
 		img = ImageIO.read(new File(fishPath));
-		//	System.out.println(listFish);
-		posX = ((int)listFish.get(i).getCoord().x) * tailleEcranX / 100;
-		posY = ((int)listFish.get(i).getCoord().y) * tailleEcranY / 100;
-	        		
+
+		if(listSize == listFish.size() ){
+		    posX = ((int)listFish.get(i).getCoord().x) * tailleEcranX / 100;
+		    posY = ((int)listFish.get(i).getCoord().y) * tailleEcranY / 100;	        		
 	        			
-		tailleX = listFish.get(i).getSizeX() * tailleEcranX / 100;
-		tailleY = listFish.get(i).getSizeY() * tailleEcranY / 100;    		
+		    tailleX = listFish.get(i).getSizeX() * tailleEcranX / 100;
+		    tailleY = listFish.get(i).getSizeY() * tailleEcranY / 100;    		
 	        			
-		if (listFish.get(i).getInversed()){
-		    g.drawImage(img, posX+tailleX, posY, -tailleX, tailleY, this);
-		}
-		else{
-		    g.drawImage(img, posX, posY, tailleX, tailleY, this);
-		}
-	        		
+		    if (listFish.get(i).getInversed()){
+			g.drawImage(img, posX+tailleX, posY, -tailleX, tailleY, this);
+		    }
+		    else{
+			g.drawImage(img, posX, posY, tailleX, tailleY, this);
+		    }
+		} 
 	    }
+	    
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}       

@@ -2,16 +2,21 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.LinkedList;
+import java.util.HashMap;
 
+/*
+  Reads the messages sent by the server and prints them when needed. Also updates the list of fishes of the window.
 
-public class ReadInput implements Runnable{
+ */
+
+public class ReadServerMessages implements Runnable{
 
     private Socket socket = null;
     private BufferedReader in = null; 
     private Window window;
     private LinkedList <Fish> listFishes;
 
-    public ReadInput(Window w, BufferedReader in, Socket s){
+    public ReadServerMessages(Window w, BufferedReader in, Socket s){
     	window = w;
     	this.in = in;
     	this.socket = s;
@@ -28,36 +33,27 @@ public class ReadInput implements Runnable{
     	try {	  	       		   	
 	    while (true){
 		stock = in.readLine();	
-		//System.out.println("on recoit : " + stock);
 		if (stock.startsWith("list")){
-		    //System.out.println("on recoit : " + stock);
+
 		    listFishString = stock;
 		    listFishes = p.parseFishList(listFishString); 
-		    LinkedList<Juhnytg> positions = new LinkedList<Juhnytg>();
-		    for (int i = 0 ; i < listFishes.size() ; i++){
-			positions.addFirst(new Juhnytg(listFishes.get(i).getFishType(), listFishes.get(i).getCoord()));
-			//System.out.println("coord : " + listFishes.get(i).getCoord());
-		    }
+		    HashMap <String,Point> nameAndPoint = new HashMap <String,Point>();
 
-		    p.fillPositionsList(positions);
+		    for (int i = 0 ; i < listFishes.size() ; i++){
+			nameAndPoint.put(listFishes.get(i).getFishType(), listFishes.get(i).getCoord());
+		    }
+		    p.fillPositionsHashMap(nameAndPoint);
 		    window.updateFishList(listFishes);
 		} else if (stock.startsWith("OK")){
 		    if(Client.displayMessages)
 			System.out.println("->"+stock);
 			     
-		    listCommands = ReadAndSendConsoleOutput.getListCommands();
+		    listCommands = ReadUserMessages.getListCommands();
 		    command = listCommands.getFirst();
-		    //if (command.startsWith("startFish")){
-		    //String[] parts = command.split(" ");
-		    //ReadAndSendConsoleOutput.getListStarted().add(parts[1]);	
-		    //ReadAndSendConsoleOutput.isActivated = true;
-		    //} else {
-		    //System.out.println(stock);
-		    //}
 		    listCommands.removeFirst();
     				 
 		} else if (stock.startsWith("NOK")){
-		    listCommands = ReadAndSendConsoleOutput.getListCommands();
+		    listCommands = ReadUserMessages.getListCommands();
 		    listCommands.removeFirst();
 		    if(Client.displayMessages)
 			System.out.println("->"+stock);

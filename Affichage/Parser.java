@@ -1,18 +1,20 @@
 import java.util.Scanner; 
 import java.util.LinkedList;
+import java.util.HashMap;
 
+/*
+  Parses the answer to getFishesContinuously to a list of fishes.
 
-	
+ */	
 
 public class Parser { 
 
     Scanner sc;
-    private LinkedList <Juhnytg> fishPositions = null;
+    private HashMap <String,Point> fishPositionsHashMap;
 
     public Parser(){
 	sc = new Scanner(System.in);
-	fishPositions = new LinkedList<Juhnytg> ();
-
+	fishPositionsHashMap = new HashMap <String,Point> ();
     }
     
 
@@ -27,8 +29,7 @@ public class Parser {
 	    parts[j] = parts[j].replace("[","");
 	    parts[j] = parts[j].replace("]","");
 	}
-    	   	
-    	
+   	   	   	
 	for (int j=1 ; j < parts.length ; j++) {
 	 
 	    switch (j % 5){
@@ -55,33 +56,25 @@ public class Parser {
 		// fishposition contains the former position and the fishType of all previous fishses
 		// start a new fish at 0,0
 		// keep going with a previous fish with its former position
-		if (fishPositions.size() == 0){  
-		    //System.out.println("coucou");
-		    
+
+		if (fishPositionsHashMap.size() == 0){  		    
 		    fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y, speed, new Point(0,0)));
 		}
-
 		else {
-		    //System.out.println("PAS COUCOU");
 		    boolean found = false;
-		    //System.out.println("position : " + fishPositions.get(0).getPos());
-		    for (int i = 0 ; i < fishPositions.size() ; i++){			
-			if (fishType.equals(fishPositions.get(i).getFishType())){
-			    fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y, speed, fishPositions.get(i).getPos()));
-			    fishPositions.remove(i);
+		    if (fishPositionsHashMap.containsKey(fishType)){
+			fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y, speed, (Point)fishPositionsHashMap.get(fishType)));
+			    fishPositionsHashMap.remove(fishType);
 			    found = true;
-			    //break;
-			}
 		    }
-
+		    
 		    if (!found){
 			fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y, speed, new Point(0,0)));
-			System.out.println("not found");
-		        
+		       	        
 		    }
 		    
 		}
-		
+					      		
 		break;
 	
 	    }
@@ -89,9 +82,11 @@ public class Parser {
 	return fishes;
 	
     }
-
-    public void fillPositionsList(LinkedList<Juhnytg> list){	
-    	fishPositions = list;
+    
+    public void fillPositionsHashMap(HashMap <String,Point> hm){	
+    	fishPositionsHashMap = hm;
     }
+
+
 
 }

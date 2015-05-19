@@ -3,7 +3,10 @@ import java.awt.Color;
 import java.util.LinkedList;
 import java.awt.BorderLayout;
 
+/*
+  The graphic object representing the window. Calls the repaint method of the panel each time a fish has to move.
 
+ */
 @SuppressWarnings("serial")
 public class Window extends JFrame {  
     private final int refreshRate = 1; // milliseconds
