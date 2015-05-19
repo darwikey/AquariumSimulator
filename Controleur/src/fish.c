@@ -150,15 +150,16 @@ void fish__update(struct aquarium* a){
       a->fishs[i]->delay--;
 
       if (a->fishs[i]->delay <= 0){
+          int must_update_pos = 1;
 
 	// si sa destination est en dehors de l'ecran, on le change de node
           enum Direction dir = 0;
 
-          if (a->fishs[i]->target_x < 0 )
+          if (a->fishs[i]->target_x < - a-> fishs[i]->size_x)
               dir |= LEFT;
           if (a->fishs[i]->target_x > 100)
-              dir |= LEFT;
-          if (a->fishs[i]->target_y < 0)
+              dir |= RIGHT;
+          if (a->fishs[i]->target_y < - a->fishs[i]->size_y)
               dir |= UP;
           if (a->fishs[i]->target_y > 100)
               dir |= DOWN;
@@ -170,29 +171,67 @@ void fish__update(struct aquarium* a){
 
                   if (next_node != NULL){
                       a->fishs[i]->node = next_node;
+                      must_update_pos = 0;
+
+                      if ((dir & RIGHT) && 
+                              (a->fishs[i]->path_way == HORIZONTAL_PATH_WAY || 
+                               a->fishs[i]->path_way == RANDOM_PATH_WAY)){
+                          a->fishs[i]->target_x = 1 - a->fishs[i]->size_x;
+                      }
+
+                      if ((dir & LEFT) && 
+                              (a->fishs[i]->path_way == HORIZONTAL_PATH_WAY || 
+                               a->fishs[i]->path_way == RANDOM_PATH_WAY)){
+                          a->fishs[i]->target_x = 99;
+                      }
+
+                      if ((dir & UP) && 
+                              (a->fishs[i]->path_way == VERTICAL_PATH_WAY || 
+                               a->fishs[i]->path_way == RANDOM_PATH_WAY)){
+                          a->fishs[i]->target_y = 99;
+                      }
+
+                      if ((dir & DOWN) && 
+                              (a->fishs[i]->path_way == VERTICAL_PATH_WAY || 
+                               a->fishs[i]->path_way == RANDOM_PATH_WAY)){
+                          a->fishs[i]->target_y = 1 - a->fishs[i]->size_y;
+                      }
+
+                      a->fishs[i]->delay = 2;
+
                   }
               }
           }
 
-	switch(a->fishs[i]->path_way){
-	default:
-	case RANDOM_PATH_WAY:
-	  a->fishs[i]->target_x = (rand() % 150) - 25;
-	  a->fishs[i]->target_y = (rand() % 150) - 25;
-	  break;
+          if (must_update_pos){
+              switch(a->fishs[i]->path_way){
+                  default:
+                  case RANDOM_PATH_WAY:
+                      a->fishs[i]->target_x = (rand() % 175) - 50;
+                      a->fishs[i]->target_y = (rand() % 175) - 50;
+                      break;
 
-	case HORIZONTAL_PATH_WAY:
-	  a->fishs[i]->target_x = 120;
-	  a->fishs[i]->target_y = 0;
-	  break;
+                  case HORIZONTAL_PATH_WAY:
+                      a->fishs[i]->target_x = 120;
+                      a->fishs[i]->target_y = 0;
+                      break;
 
-	case VERTICAL_PATH_WAY:
-	  a->fishs[i]->target_x = 0;
-	  a->fishs[i]->target_y = 120;
-	  break;
-	}
+                  case VERTICAL_PATH_WAY:
+                      a->fishs[i]->target_x = 0;
+                      a->fishs[i]->target_y = 120;
+                      break;
+              }
 
-	a->fishs[i]->delay = rand() % 4 + 4;
+              a->fishs[i]->delay = rand() % 4 + 4;
+              if (a->fishs[i]->target_x > 100)
+                  a->fishs[i]->target_x = 101;
+              if (a->fishs[i]->target_x < -25 || a->fishs[i]->target_x < - a->fishs[i]->size_x)
+                  a->fishs[i]->target_x = -1 - a->fishs[i]->size_x;
+              if (a->fishs[i]->target_y > 100)
+                  a->fishs[i]->target_y = 101;
+              if (a->fishs[i]->target_y < -25 || a->fishs[i]->target_y < - a->fishs[i]->size_y)
+                  a->fishs[i]->target_y = -1 - a->fishs[i]->size_y;
+          }
 	
 	log(LOG_INFO, "nouvelle destination pour %s : %dx%d, (en %d seconde)\n", a->fishs[i]->name, a->fishs[i]->target_x, a->fishs[i]->target_y, a->fishs[i]->delay);
       }

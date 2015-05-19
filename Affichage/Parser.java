@@ -57,8 +57,20 @@ public class Parser {
 		// start a new fish at 0,0
 		// keep going with a previous fish with its former position
 
-		if (fishPositionsHashMap.size() == 0){  		    
-		    fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y, speed, new Point(0,0)));
+                int min_dist = Math.min(Math.min(coord_x -(-size_x), 100-coord_x),Math.min(coord_y -(-size_y),100-coord_y));
+                int pos_x = - coord_x;// the position to apear
+                int pos_y = - coord_y;
+                if (coord_x + size_x == min_dist)
+                    pos_x = -size_x;
+                if (100-coord_x == min_dist)
+                    pos_x = 100;
+                if (coord_y + size_y == min_dist)
+                    pos_y = -size_y;
+                if (100-coord_y == min_dist)
+                    pos_y = 100;
+
+		if (fishPositionsHashMap.size() == 0){
+		    fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y, speed, new Point(pos_x,pos_y)));
 		}
 		else {
 		    boolean found = false;
@@ -69,7 +81,7 @@ public class Parser {
 		    }
 		    
 		    if (!found){
-			fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y, speed, new Point(0,0)));
+			fishes.add((j-1)/5, new Fish(fishType, size_x, size_y, coord_x, coord_y, speed, new Point(pos_x,pos_y)));
 		       	        
 		    }
 		    
