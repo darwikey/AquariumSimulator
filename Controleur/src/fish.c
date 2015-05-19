@@ -152,17 +152,27 @@ void fish__update(struct aquarium* a){
       if (a->fishs[i]->delay <= 0){
 
 	// si sa destination est en dehors de l'ecran, on le change de node
-	if (a->fishs[i]->target_x < 0 || a->fishs[i]->target_x > 100 || a->fishs[i]->target_y < 0 || a->fishs[i]->target_y > 100){
-	  if (a->graph != NULL && a->fishs[i]->node != NULL){
-	    node* next_node = graph__get_random_connected_neighbour(a->graph, a->fishs[i]->node);
+          enum Direction dir = 0;
 
-	    log(LOG_INFO, "node : %p,  next node : %p\n", a->fishs[i]->node, next_node);
+          if (a->fishs[i]->target_x < 0 )
+              dir |= LEFT;
+          if (a->fishs[i]->target_x > 100)
+              dir |= LEFT;
+          if (a->fishs[i]->target_y < 0)
+              dir |= UP;
+          if (a->fishs[i]->target_y > 100)
+              dir |= DOWN;
+          if (dir & (UP | DOWN | RIGHT | LEFT)){
+              if (a->graph != NULL && a->fishs[i]->node != NULL){
+                  node* next_node = graph__get_random_connected_neighbour(a->graph, a->fishs[i]->node, dir);
 
-	    if (next_node != NULL){
-	      a->fishs[i]->node = next_node;
-	    }
-	  }
-	}
+                  log(LOG_INFO, "node : %p,  next node : %p\n", a->fishs[i]->node, next_node);
+
+                  if (next_node != NULL){
+                      a->fishs[i]->node = next_node;
+                  }
+              }
+          }
 
 	switch(a->fishs[i]->path_way){
 	default:
@@ -184,7 +194,7 @@ void fish__update(struct aquarium* a){
 
 	a->fishs[i]->delay = rand() % 4 + 4;
 	
-	log(LOG_INFO, "nouvelle destination pour %s : %dx%d, (en %d seconde)", a->fishs[i]->name, a->fishs[i]->target_x, a->fishs[i]->target_y, a->fishs[i]->delay);
+	log(LOG_INFO, "nouvelle destination pour %s : %dx%d, (en %d seconde)\n", a->fishs[i]->name, a->fishs[i]->target_x, a->fishs[i]->target_y, a->fishs[i]->delay);
       }
     }
 

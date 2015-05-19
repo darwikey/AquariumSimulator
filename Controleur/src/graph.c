@@ -171,10 +171,37 @@ char* graph__get_node_name(struct graph* g, node* node){
     return NULL;
 }
 
-node* graph__get_random_connected_neighbour(struct graph* g, node* node){
+static enum Direction graph__get_other_node_pos(Agedge_t *e, Agnode_t *n){
+    enum Direction dir = 0;
+    char * label = agget(e,"label");
+    int inversed = (aghead(e) == n);
+    for (int i = 0; label[i] != '\0'; i++){
+        char c = label[i];
+        switch (c){
+            case 'U':
+                dir |= (inversed) ? DOWN : UP;
+                break;
+            case 'D':
+                dir |= (inversed) ? UP : DOWN;
+                break;
+            case 'L':
+                dir |= (inversed) ? RIGHT : LEFT;
+                break;
+            case 'R':
+                dir |= (inversed) ? LEFT : RIGHT;
+                break;
+            default :
+                break;
+        }
+    }
+    if (dir == 0)
+        dir = UP | DOWN | RIGHT | LEFT;//L'utilisateur n'a pas renseigné de direction, on reste compatible
+    return dir;
+}
+
+node* graph__get_random_connected_neighbour(struct graph* g, node* node, enum Direction dir){
     int degree = agdegree(g->agraph, node, 1, 1);
     if (!degree){
-      printf("degree = 0");
         return NULL;
     }
     int neighbour_pos = rand() % degree;
@@ -184,7 +211,8 @@ node* graph__get_random_connected_neighbour(struct graph* g, node* node){
         if (current_neighbour == node){
             current_neighbour = agtail(e);
         }
-        if (graph__node_is_connected(g,current_neighbour)){
+        if (graph__node_is_connected(g,current_neighbour) &&
+                    (dir & graph__get_other_node_pos(e,current_neighbour))){
             connected_neighbour = current_neighbour;
         }
         if (neighbour_pos<=0 && connected_neighbour){
