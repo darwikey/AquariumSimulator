@@ -58,8 +58,8 @@ public class Parser {
 		// keep going with a previous fish with its former position
 
                 int min_dist = Math.min(Math.min(coord_x -(-size_x), 100-coord_x),Math.min(coord_y -(-size_y),100-coord_y));
-                int pos_x = - coord_x;// the position to apear
-                int pos_y = - coord_y;
+                int pos_x = coord_x;// the position to apear
+                int pos_y = coord_y;
                 if (coord_x + size_x == min_dist)
                     pos_x = -size_x;
                 if (100-coord_x == min_dist)
