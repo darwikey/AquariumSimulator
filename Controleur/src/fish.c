@@ -142,98 +142,99 @@ void fish__update(struct aquarium* a){
 
   while(1){
     for (int i = 0; i < a->fish_number; i++){
+        struct fish* current_fish = a->fishs[i];
       
-      if (!a->fishs[i]->is_started){
+      if (!current_fish->is_started){
 	continue;
       }
       
-      a->fishs[i]->delay--;
+      current_fish->delay--;
 
-      if (a->fishs[i]->delay <= 0){
+      if (current_fish->delay <= 0){
           int must_update_pos = 1;
 
 	// si sa destination est en dehors de l'ecran, on le change de node
           enum Direction dir = 0;
 
-          if (a->fishs[i]->target_x < - a-> fishs[i]->size_x)
+          if (current_fish->target_x < - current_fish->size_x)
               dir |= LEFT;
-          if (a->fishs[i]->target_x > 100)
+          if (current_fish->target_x > 100)
               dir |= RIGHT;
-          if (a->fishs[i]->target_y < - a->fishs[i]->size_y)
+          if (current_fish->target_y < - current_fish->size_y)
               dir |= UP;
-          if (a->fishs[i]->target_y > 100)
+          if (current_fish->target_y > 100)
               dir |= DOWN;
           if (dir & (UP | DOWN | RIGHT | LEFT)){
-              if (a->graph != NULL && a->fishs[i]->node != NULL){
-                  node* next_node = graph__get_random_connected_neighbour(a->graph, a->fishs[i]->node, dir);
+              if (a->graph != NULL && current_fish->node != NULL){
+                  node* next_node = graph__get_random_connected_neighbour(a->graph, current_fish->node, dir);
 
-                  log(LOG_INFO, "node : %p,  next node : %p\n", a->fishs[i]->node, next_node);
+                  log(LOG_INFO, "node : %p,  next node : %p\n", current_fish->node, next_node);
 
                   if (next_node != NULL){
-                      a->fishs[i]->node = next_node;
+                      current_fish->node = next_node;
                       must_update_pos = 0;
 
                       if ((dir & RIGHT) && 
-                              (a->fishs[i]->path_way == HORIZONTAL_PATH_WAY || 
-                               a->fishs[i]->path_way == RANDOM_PATH_WAY)){
-                          a->fishs[i]->target_x = 1 - a->fishs[i]->size_x;
+                              (current_fish->path_way == HORIZONTAL_PATH_WAY || 
+                               current_fish->path_way == RANDOM_PATH_WAY)){
+                          current_fish->target_x = 1 - current_fish->size_x;
                       }
 
                       if ((dir & LEFT) && 
-                              (a->fishs[i]->path_way == HORIZONTAL_PATH_WAY || 
-                               a->fishs[i]->path_way == RANDOM_PATH_WAY)){
-                          a->fishs[i]->target_x = 99;
+                              (current_fish->path_way == HORIZONTAL_PATH_WAY || 
+                               current_fish->path_way == RANDOM_PATH_WAY)){
+                          current_fish->target_x = 99;
                       }
 
                       if ((dir & UP) && 
-                              (a->fishs[i]->path_way == VERTICAL_PATH_WAY || 
-                               a->fishs[i]->path_way == RANDOM_PATH_WAY)){
-                          a->fishs[i]->target_y = 99;
+                              (current_fish->path_way == VERTICAL_PATH_WAY || 
+                               current_fish->path_way == RANDOM_PATH_WAY)){
+                          current_fish->target_y = 99;
                       }
 
                       if ((dir & DOWN) && 
-                              (a->fishs[i]->path_way == VERTICAL_PATH_WAY || 
-                               a->fishs[i]->path_way == RANDOM_PATH_WAY)){
-                          a->fishs[i]->target_y = 1 - a->fishs[i]->size_y;
+                              (current_fish->path_way == VERTICAL_PATH_WAY || 
+                               current_fish->path_way == RANDOM_PATH_WAY)){
+                          current_fish->target_y = 1 - current_fish->size_y;
                       }
 
-                      a->fishs[i]->delay = 2;
+                      current_fish->delay = 2;
 
                   }
               }
           }
 
           if (must_update_pos){
-              switch(a->fishs[i]->path_way){
+              switch(current_fish->path_way){
                   default:
                   case RANDOM_PATH_WAY:
-                      a->fishs[i]->target_x = (rand() % 175) - 50;
-                      a->fishs[i]->target_y = (rand() % 175) - 50;
+                      current_fish->target_x = (rand() % 175) - 50;
+                      current_fish->target_y = (rand() % 175) - 50;
                       break;
 
                   case HORIZONTAL_PATH_WAY:
-                      a->fishs[i]->target_x = 120;
-                      a->fishs[i]->target_y = 0;
+                      current_fish->target_x = 120;
+                      current_fish->target_y = 0;
                       break;
 
                   case VERTICAL_PATH_WAY:
-                      a->fishs[i]->target_x = 0;
-                      a->fishs[i]->target_y = 120;
+                      current_fish->target_x = 0;
+                      current_fish->target_y = 120;
                       break;
               }
 
-              a->fishs[i]->delay = rand() % 4 + 4;
-              if (a->fishs[i]->target_x > 100)
-                  a->fishs[i]->target_x = 101;
-              if (a->fishs[i]->target_x < -25 || a->fishs[i]->target_x < - a->fishs[i]->size_x)
-                  a->fishs[i]->target_x = -1 - a->fishs[i]->size_x;
-              if (a->fishs[i]->target_y > 100)
-                  a->fishs[i]->target_y = 101;
-              if (a->fishs[i]->target_y < -25 || a->fishs[i]->target_y < - a->fishs[i]->size_y)
-                  a->fishs[i]->target_y = -1 - a->fishs[i]->size_y;
+              current_fish->delay = rand() % 4 + 4;
+              if (current_fish->target_x > 100)
+                  current_fish->target_x = 101;
+              if (current_fish->target_x < -25 || current_fish->target_x < - current_fish->size_x)
+                  current_fish->target_x = -1 - current_fish->size_x;
+              if (current_fish->target_y > 100)
+                  current_fish->target_y = 101;
+              if (current_fish->target_y < -25 || current_fish->target_y < - current_fish->size_y)
+                  current_fish->target_y = -1 - current_fish->size_y;
           }
 	
-	log(LOG_INFO, "nouvelle destination pour %s : %dx%d, (en %d seconde)\n", a->fishs[i]->name, a->fishs[i]->target_x, a->fishs[i]->target_y, a->fishs[i]->delay);
+	log(LOG_INFO, "nouvelle destination pour %s : %dx%d, (en %d seconde)\n", current_fish->name, current_fish->target_x, current_fish->target_y, current_fish->delay);
       }
     }
 
