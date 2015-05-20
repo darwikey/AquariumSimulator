@@ -4,6 +4,7 @@
 #include <string.h>
 #include "utils.h"
 
+int rand_int(int min, int max);
 
 struct fish* fish__create_fish(char* name){
   struct fish* f = malloc(sizeof(struct fish));
@@ -205,11 +206,17 @@ void fish__update(struct aquarium* a){
           }
 
           if (must_update_pos){
+              enum Direction available_dir = graph__get_available_direction(a->graph, current_fish->node);
               switch(current_fish->path_way){
                   default:
                   case RANDOM_PATH_WAY:
-                      current_fish->target_x = (rand() % 175) - 50;
-                      current_fish->target_y = (rand() % 175) - 50;
+                      printf("%s:\n",current_fish->name);
+                      current_fish->target_x = rand_int(
+                              (available_dir & LEFT) ? -2*current_fish->size_x : 0,
+                              (available_dir & RIGHT) ? 100+current_fish->size_x : 100 - current_fish->size_x);
+                      current_fish->target_y = rand_int(
+                              (available_dir & UP) ? -2*current_fish->size_y : 0,
+                              (available_dir & DOWN) ? 100+current_fish->size_y : 100-current_fish->size_y);
                       break;
 
                   case HORIZONTAL_PATH_WAY:
@@ -240,4 +247,9 @@ void fish__update(struct aquarium* a){
 
     sleep(1);
   }
+}
+
+int rand_int (int min, int max){
+    int res = (rand() % (max - min)) + min;
+    return res;
 }

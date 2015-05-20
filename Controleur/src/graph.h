@@ -44,5 +44,9 @@ node* graph__get_not_connected_node(struct graph*g,char *prefered_name);
 node* graph__get_random_connected_neighbour(struct graph* g, node* node, enum Direction dir);
 char* graph__get_node_name(struct graph*g, node* node);
 
+/**
+ * get a direction in wich ther is a connected neighbour
+ */
+enum Direction graph__get_available_direction(struct graph *g, node* node);
 
 #endif

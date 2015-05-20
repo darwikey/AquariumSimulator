@@ -224,3 +224,18 @@ node* graph__get_random_connected_neighbour(struct graph* g, node* node, enum Di
     return connected_neighbour;
 }
 
+//This function can be improoved by using a cache system
+enum Direction graph__get_available_direction(struct graph *g, node* node){
+    enum Direction dir=0;
+    for (Agedge_t *e = agfstedge(g->agraph, node); e; e = agnxtedge(g->agraph, e, node)){
+        Agnode_t *current_neighbour = aghead(e);
+        if (current_neighbour == node){
+            current_neighbour = agtail(e);
+        }
+        if (graph__node_is_connected(g,current_neighbour)){
+            dir |= graph__get_other_node_pos(e,current_neighbour);
+        }
+    }
+    return dir;
+}
+
